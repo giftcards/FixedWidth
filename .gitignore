@@ -1,0 +1,8 @@
+/.buildpath
+/.project
+/.settings
+/cov
+/vendor
+/composer.lock
+/.idea
+atlassian-ide-plugin.xml

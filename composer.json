@@ -1,0 +1,19 @@
+{
+    "name": "giftcards/fixed-width",
+    "description": "Library for working with fixed width files as well as their associated specs",
+    "license": "MIT",
+    "autoload": {
+        "psr-0": {
+            "Giftcards\\FixedWidth": "src/"
+        }
+    },
+    "require": {
+        "php": ">=3.5",
+        "symfony/config": "~2.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "@dev",
+        "fzaninotto/faker" : "~1.2"
+    },
+    "target-dir": "src/Giftcards/FixedWidth"
+}
