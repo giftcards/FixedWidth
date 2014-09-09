@@ -11,12 +11,8 @@ namespace Giftcards\FixedWidth;
 
 use Giftcards\FixedWidth\Spec\FieldSpec;
 use Giftcards\FixedWidth\Spec\FileSpec;
-use Giftcards\FixedWidth\Spec\Loader\SpecLoaderInterface;
-use
-    Giftcards\FixedWidth\Spec\Recognizer\FailedRecognizer;
-use
-    Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface;
-use Symfony\Component\Finder\SplFileInfo;
+use Giftcards\FixedWidth\Spec\Recognizer\FailedRecognizer;
+use Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface;
 
 class FileReader
 {

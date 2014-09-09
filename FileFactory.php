@@ -39,12 +39,12 @@ class FileFactory
         return new FileBuilder($name, $this->specLoader->loadSpec($specName));
     }
 
-    public function createFromFile(SplFileInfo $file, $specName)
+    public function createFromFile(\SplFileInfo $file, $specName)
     {
         return new File(
             $file->getFilename(),
             $this->specLoader->loadSpec($specName)->getWidth(),
-            explode("\r\n", $file->getContents())
+            explode("\r\n", file_get_contents($file->getRealPath()))
         );
     }
 

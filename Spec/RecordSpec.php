@@ -9,8 +9,6 @@
 namespace Giftcards\FixedWidth\Spec;
 
 
-use Giftcards\FixedWidth\Spec\SpecNotFoundException;
-
 class RecordSpec
 {
     protected $name;

@@ -9,9 +9,6 @@
 namespace Giftcards\FixedWidth\Spec;
 
 
-use Giftcards\FixedWidth\Spec\RecordSpec;
-use Giftcards\FixedWidth\Spec\SpecNotFoundException;
-
 class FileSpec
 {
     /** @var  RecordSpec[] */

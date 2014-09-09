@@ -8,12 +8,19 @@
         }
     },
     "require": {
-        "php": ">=3.5",
-        "symfony/config": "~2.0"
+        "php": ">=5.3"
     },
     "require-dev": {
         "mockery/mockery": "@dev",
-        "fzaninotto/faker" : "~1.2"
+        "fzaninotto/faker" : "~1.2",
+        "symfony/yaml": "~2.0",
+        "symfony/config": "~2.0",
+        "symfony/options-resolver": "~2.0"
     },
-    "target-dir": "src/Giftcards/FixedWidth"
+    "target-dir": "src/Giftcards/FixedWidth",
+    "suggest": {
+        "symfony/options-resolver": "spec file loading",
+        "symfony/config": "spec file loading",
+        "symfony/yaml": "yaml spec file loading"
+    }
 }
