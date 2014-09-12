@@ -24,6 +24,15 @@ class SliceTest extends TestCase
         $this->assertEquals($finish - $start, $slice->getWidth());
         $this->assertEquals($slice, Slice::createFromString($start.':'.$finish));
         $this->assertEquals($start.':'.$finish, $slice);
+        $this->assertEquals(new Slice(1, 2), Slice::createFromString(1));
+    }
+
+    /**
+     * @expectedException \RangeException
+     */
+    public function testInvalidSliceRange()
+    {
+        new Slice(23, 12);
     }
 }
  

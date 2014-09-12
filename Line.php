@@ -25,11 +25,6 @@ class Line implements \ArrayAccess
 
     public function get($start, $finish)
     {
-        if (!$this->has($start, $finish)) {
-
-            throw new FieldNotFoundException($start, $finish);
-        }
-
         return $this->loadSlice(new Slice($start, $finish));
     }
 
@@ -41,14 +36,14 @@ class Line implements \ArrayAccess
 
     public function has($start, $finish)
     {
-        $value = $this->loadSlice(new Slice($start, $finish));
+        try {
 
-        if ($value === false) {
+            $this->loadSlice(new Slice($start, $finish));
+            return true;
+        } catch (\OutOfBoundsException $e) {
 
             return false;
         }
-
-        return strlen(str_replace(' ', '', $value)) !== '';
     }
 
     public function remove($start, $finish)
@@ -119,7 +114,7 @@ class Line implements \ArrayAccess
     {
         if ($slice->getFinish() >= strlen($this->data) || $slice->getStart() < 0) {
 
-            throw new \OutOfBoundsException(sprintf('the range %s:%s is outside the width of this line.', $slice->getStart(), $slice->getFinish()));
+            throw new \OutOfBoundsException(sprintf('the slice %s is outside the length %d of this line.', $slice, $this->getLength()));
         }
     }
 }

@@ -9,7 +9,6 @@
 namespace Giftcards\FixedWidth\Spec\Recognizer;
 
 
-use Giftcards\FixedWidth\FieldNotFoundException;
 use Giftcards\FixedWidth\Line;
 use Giftcards\FixedWidth\Spec\FileSpec;
 use Giftcards\FixedWidth\Spec\SpecNotFoundException;
@@ -45,7 +44,7 @@ class SpecFieldRecognizer implements RecordSpecRecognizerInterface
 
                     return $name;
                 }
-            } catch (FieldNotFoundException $e) {
+            } catch (\OutOfBoundsException $e) {
             }
         }
 
