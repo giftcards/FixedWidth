@@ -19,12 +19,12 @@ class FieldSpec
     protected $slice;
     protected $paddingDirection;
     protected $paddingChar;
-    protected $formatType;
+    protected $formatSpecifier;
     protected $default;
 
     public function __construct(
         $default,
-        $formatType,
+        $formatSpecifier,
         $name,
         $slice,
         $paddingChar,
@@ -32,7 +32,7 @@ class FieldSpec
         $type
     ) {
         $this->default = $default;
-        $this->formatType = $formatType;
+        $this->formatSpecifier = $formatSpecifier;
         $this->name = $name;
         $this->paddingChar = $paddingChar;
         $this->paddingDirection = $paddingDirection;
@@ -51,9 +51,9 @@ class FieldSpec
     /**
      * @return string
      */
-    public function getFormatType()
+    public function getFormatSpecifier()
     {
-        return $this->formatType;
+        return $this->formatSpecifier;
     }
 
     /**

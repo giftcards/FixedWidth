@@ -11,8 +11,6 @@ namespace Giftcards\FixedWidth;
 
 use Giftcards\FixedWidth\Spec\FieldSpec;
 use Giftcards\FixedWidth\Spec\FileSpec;
-use Giftcards\FixedWidth\Spec\Loader\SpecLoaderInterface;
-use Symfony\Component\Finder\SplFileInfo;
 
 class FileBuilder
 {
@@ -53,7 +51,7 @@ class FileBuilder
                     $fieldSpec->getPaddingChar(),
                     $fieldSpec->getPaddingDirection() == FieldSpec::PADDING_DIRECTION_LEFT ? '' : '-',
                     $range[1] - $range[0],
-                    $fieldSpec->getFormatType()
+                    $fieldSpec->getFormatSpecifier()
                 ),
                 $value
             );

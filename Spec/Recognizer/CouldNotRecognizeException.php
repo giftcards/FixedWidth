@@ -11,5 +11,11 @@ namespace Giftcards\FixedWidth\Spec\Recognizer;
 
 class CouldNotRecognizeException extends \Exception
 {
-
+    public function __construct($extraHelp = '')
+    {
+        parent::__construct(sprintf(
+            'Could not recognize the spec for the given line. %s',
+            $extraHelp ? 'this may help: '.$extraHelp : ''
+        ));
+    }
 } 

@@ -9,11 +9,11 @@
 namespace Giftcards\FixedWidth\Spec\Loader;
 
 
-use Giftcards\FixedWidth\Spec\Loader\ArraySpecLoader;
+use Giftcards\FixedWidth\Spec\SpecNotFoundException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\FileLocatorInterface;
 
-abstract class SpecFileLoader extends ArraySpecLoader
+abstract class AbstractSpecFileLoader extends ArraySpecLoader
 {
     protected $fileLocator;
 
@@ -23,14 +23,20 @@ abstract class SpecFileLoader extends ArraySpecLoader
         parent::__construct([]);
     }
 
-    public function loadSpec($name)
+    public function initializeSpec($name)
     {
-        if ($path = $this->fileLocator->locate($this->getFileName($name))) {
+        try {
 
-            $this->specs[$name] = $this->loadSpecFile($path, $name);
+            if ($path = $this->fileLocator->locate($this->getFileName($name))) {
+
+                $this->arraySpecs[$name] = $this->loadSpecFile($path, $name);
+            }
+        } catch (\Exception $e) {
+
+            throw new SpecNotFoundException($name, 'file', $e);
         }
 
-        return parent::loadSpec($name);
+        parent::initializeSpec($name);
     }
 
     abstract protected function getFileName($name);

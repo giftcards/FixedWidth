@@ -1,0 +1,22 @@
+width: 78,
+field_types:
+    integer: []
+record_types:
+    record1:
+        field1:
+            type: integer
+            slice: 34:39
+            default: hello
+    record2:
+        field1:
+            type: integer
+            slice: 34:41
+            default: goodbye
+    record3:
+        field2:
+            type: integer
+            slice: 45:56
+    record4:
+        field2:
+            type: integer
+            slice: 45:56

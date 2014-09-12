@@ -1,0 +1,8 @@
+width: 78,
+field_types:
+    integer: []
+record_types:
+    record1:
+        field1:
+            type: string
+            slice: 34:36

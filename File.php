@@ -18,15 +18,11 @@ class File implements \ArrayAccess, \Countable, \IteratorAggregate
     protected $lines;
     protected $width;
 
-    public function __construct($name, $width, array $lines = [])
+    public function __construct($name, $width, array $lines = array())
     {
         $this->name = $name;
         $this->width = $width;
-
-        foreach ($lines as $line) {
-
-            $this[] = $line;
-        }
+        array_walk($lines, array($this, 'addLine'));
     }
 
     public function __toString()
@@ -88,27 +84,13 @@ class File implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function offsetSet($offset, $value)
     {
-        if (!$value instanceof Line) {
-
-            $value = new Line((string)$value);
-        }
-
-        if ($value->getLength() != $this->width) {
-
-            throw new \InvalidArgumentException(sprintf(
-                'All lines in a batch file must be %d chars wide this line is %d chars wide.',
-                $this->width,
-                strlen($value)
-            ));
-        }
-
         if (is_null($offset)) {
 
-            $this->lines[] = $value;
+            $this->addLine($value);
             return;
         }
 
-        $this->lines[$offset] = $value;
+        $this->setLine($offset, $value);
     }
 
     /**
@@ -122,7 +104,7 @@ class File implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function offsetUnset($offset)
     {
-        unset($this->lines[$offset]);
+        $this->removeLine($offset);
     }
 
     /**
@@ -157,5 +139,43 @@ class File implements \ArrayAccess, \Countable, \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->getLines());
+    }
+
+    public function addLine($line)
+    {
+        $this->lines[] = $this->validateLine($line);
+        return $this;
+    }
+
+    public function setLine($index, $line)
+    {
+        $this->lines[$index] = $this->validateLine($line);
+        return $this;
+    }
+
+    public function removeLine($index)
+    {
+        unset($this->lines[$index]);
+        $this->lines = array_values($this->lines);
+        return $this;
+    }
+
+    protected function validateLine($line)
+    {
+        if (!$line instanceof Line) {
+
+            $line = new Line((string)$line);
+        }
+
+        if ($line->getLength() != $this->width) {
+
+            throw new \InvalidArgumentException(sprintf(
+                'All lines in a batch file must be %d chars wide this line is %d chars wide.',
+                $this->width,
+                strlen($line)
+            ));
+        }
+
+        return $line;
     }
 }

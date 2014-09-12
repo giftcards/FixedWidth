@@ -1,0 +1,23 @@
+width: 78,
+field_types:
+    string:
+        format_specifier: d
+        padding_char: w
+        padding_direction: right
+    integer: []
+record_types:
+    record1:
+        field1:
+            type: string
+            default: hello
+            slice: 34:36
+            format_specifier: f
+            padding_char: x
+            padding_direction: left
+        field2:
+            type: string
+            slice: 38:42
+    record2:
+        field3:
+            type: integer
+            slice: 34:56

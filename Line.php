@@ -41,7 +41,7 @@ class Line implements \ArrayAccess
 
     public function has($start, $finish)
     {
-        $value = $this->get($start, $finish);
+        $value = $this->loadRange($start, $finish);
 
         if ($value === false) {
 

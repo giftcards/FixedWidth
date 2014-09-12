@@ -12,7 +12,7 @@ namespace Giftcards\FixedWidth\Spec\Loader;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Yaml;
 
-class YamlSpecLoader extends SpecFileLoader
+class YamlSpecLoader extends AbstractSpecFileLoader
 {
     protected $parser;
 

@@ -13,25 +13,37 @@ use Giftcards\FixedWidth\Spec\FileSpec;
 use Giftcards\FixedWidth\Spec\RecordSpec;
 use Giftcards\FixedWidth\Spec\FieldSpec;
 use Giftcards\FixedWidth\Spec\SpecNotFoundException;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ArraySpecLoader implements SpecLoaderInterface
 {
-    protected $specs = [];
+    protected $arraySpecs = [];
+    protected $initializedSpecs = [];
 
     public function __construct(array $specs)
     {
-        $this->specs = $specs;
+        $this->arraySpecs = $specs;
     }
 
-    public function loadSpec($name)
+    public function loadSpec($specName)
     {
-        if (!isset($this->specs[$name])) {
+        if (!isset($this->initializedSpecs[$specName])) {
 
-            throw new SpecNotFoundException($name, 'file');
+            $this->initializeSpec($specName);
         }
 
-        $spec = $this->specs[$name];
+        return $this->initializedSpecs[$specName];
+    }
+
+    protected function initializeSpec($specName)
+    {
+        if (!isset($this->arraySpecs[$specName])) {
+
+            throw new SpecNotFoundException($specName, 'file');
+        }
+
+        $spec = $this->arraySpecs[$specName];
 
         $fileOptionsResolver = new OptionsResolver();
         $fileOptionsResolver
@@ -42,27 +54,22 @@ class ArraySpecLoader implements SpecLoaderInterface
         $fieldTypeOptionsResolver = new OptionsResolver();
         $fieldTypeOptionsResolver
             ->setDefaults([
-                'padding_direction' => FieldSpec::PADDING_DIRECTION_LEFT,
-                'padding_char' => '',
-                'format_type' => 's',
-            ])
+                    'padding_direction' => FieldSpec::PADDING_DIRECTION_LEFT,
+                    'padding_char' => '',
+                    'format_specifier' => 's',
+                ])
             ->setAllowedTypes([
-                'padding_char' => 'scalar',
-                'format_type' => 'string'
-            ])
+                    'padding_char' => 'scalar',
+                    'format_specifier' => 'string'
+                ])
             ->setAllowedValues([
-                'padding_direction' => [
-                    FieldSpec::PADDING_DIRECTION_LEFT,
-                    FieldSpec::PADDING_DIRECTION_RIGHT
-                ]
-            ])
+                    'padding_direction' => [
+                        FieldSpec::PADDING_DIRECTION_LEFT,
+                        FieldSpec::PADDING_DIRECTION_RIGHT
+                    ]
+                ])
         ;
 
-        $fieldOptionsResolver = clone $fieldTypeOptionsResolver;
-        $fieldOptionsResolver
-            ->setRequired(['type', 'slice'])
-            ->setDefaults(['default' => null])
-        ;
 
         $spec = $fileOptionsResolver->resolve($spec);
 
@@ -71,7 +78,12 @@ class ArraySpecLoader implements SpecLoaderInterface
             return $fieldTypeOptionsResolver->resolve($fieldType);
         }, $spec['field_types']);
 
-        $fieldOptionsResolver->setAllowedValues(['type' => array_keys($spec['field_types'])]);
+        $fieldOptionsResolver = clone $fieldTypeOptionsResolver;
+        $fieldOptionsResolver
+            ->setRequired(['type', 'slice'])
+            ->setDefaults(['default' => null])
+            ->setAllowedValues(['type' => array_keys($spec['field_types'])])
+        ;
 
         $lineSpecs = [];
 
@@ -82,12 +94,12 @@ class ArraySpecLoader implements SpecLoaderInterface
             foreach ($lineType as $fieldName => $options) {
 
                 $options = $fieldOptionsResolver->resolve(array_merge(
-                    $spec['field_types'][$options['type']],
+                    isset($spec['field_types'][$options['type']]) ? $spec['field_types'][$options['type']] : array(),
                     $options
                 ));
                 $fieldSpecs[$fieldName] = new FieldSpec(
                     $options['default'],
-                    $options['format_type'],
+                    $options['format_specifier'],
                     $fieldName,
                     $options['slice'],
                     $options['padding_char'],
@@ -99,7 +111,10 @@ class ArraySpecLoader implements SpecLoaderInterface
             $lineSpecs[$name] = new RecordSpec($name, $fieldSpecs);
         }
 
-        $fileSpec = new FileSpec($lineSpecs, $name, $spec['width']);
-        return $fileSpec;
+        $this->initializedSpecs[$specName] = new FileSpec(
+            $lineSpecs,
+            $specName,
+            $spec['width']
+        );
     }
 }
