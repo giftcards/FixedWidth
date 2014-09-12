@@ -16,9 +16,9 @@ class FileSpec
     protected $name;
     protected $width;
 
-    public function __construct($lineSpecs, $name, $width)
+    public function __construct($name, array $recordSpecs, $width)
     {
-        $this->recordSpecs = $lineSpecs;
+        $this->recordSpecs = $recordSpecs;
         $this->name = $name;
         $this->width = $width;
     }
@@ -32,7 +32,7 @@ class FileSpec
     {
         if (!isset($this->recordSpecs[$name])) {
 
-            throw new SpecNotFoundException($name, 'line');
+            throw new SpecNotFoundException($name, 'record');
         }
 
         return $this->recordSpecs[$name];

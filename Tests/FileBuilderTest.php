@@ -48,8 +48,8 @@ class FileBuilderTest extends TestCase
         $this->builder = new FileBuilder(
             $this->fileName = $this->getFaker()->word,
             $this->spec = new FileSpec(
-                array(new RecordSpec($this->getFaker()->word, array())),
                 $this->getFaker()->word,
+                array(new RecordSpec($this->getFaker()->word, array())),
                 30
             )
         );

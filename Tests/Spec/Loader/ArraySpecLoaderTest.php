@@ -79,14 +79,14 @@ class ArraySpecLoaderTest extends TestCase
         $field2Spec = new FieldSpec(null, 'd', 'field2', '38:42', 'w', FieldSpec::PADDING_DIRECTION_RIGHT, 'string');
         $field3Spec = new FieldSpec(null, 's', 'field3', '34:56', '', FieldSpec::PADDING_DIRECTION_LEFT, 'integer');
         $spec = new FileSpec(
+            'spec1',
             array(
                 'record1' => new RecordSpec('record1', array(
-                    'field1' => $field1Spec,
-                    'field2' => $field2Spec
-                )),
+                        'field1' => $field1Spec,
+                        'field2' => $field2Spec
+                    )),
                 'record2' => new RecordSpec('record2', array('field3' => $field3Spec))
             ),
-            'spec1',
             78
         );
 

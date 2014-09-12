@@ -30,18 +30,18 @@ class Line implements \ArrayAccess
             throw new FieldNotFoundException($start, $finish);
         }
 
-        return $this->loadRange($start, $finish);
+        return $this->loadSlice(new Slice($start, $finish));
     }
 
     public function set($start, $finish, $value)
     {
-        $this->setRange($start, $finish, $value);
+        $this->setSlice(new Slice($start, $finish), $value);
         return $this;
     }
 
     public function has($start, $finish)
     {
-        $value = $this->loadRange($start, $finish);
+        $value = $this->loadSlice(new Slice($start, $finish));
 
         if ($value === false) {
 
@@ -69,50 +69,57 @@ class Line implements \ArrayAccess
 
     public function offsetExists($offset)
     {
-        list($start, $finish) = $this->parseRange($offset);
-        return $this->has($start, $finish);
+        $slice = $this->parseSlice($offset);
+        return $this->has($slice->getStart(), $slice->getFinish());
     }
 
     public function offsetGet($offset)
     {
-        list($start, $finish) = $this->parseRange($offset);
-        return $this->get($start, $finish);
+        $slice = $this->parseSlice($offset);
+        return $this->get($slice->getStart(), $slice->getFinish());
     }
 
     public function offsetSet($offset, $value)
     {
-        list($start, $finish) = $this->parseRange($offset);
-        $this->set($start, $finish, $value);
+        $slice = $this->parseSlice($offset);
+        $this->set($slice->getStart(), $slice->getFinish(), $value);
     }
 
     public function offsetUnset($offset)
     {
-        list($start, $finish) = $this->parseRange($offset);
-        $this->remove($start, $finish);
+        $slice = $this->parseSlice($offset);
+        $this->remove($slice->getStart(), $slice->getFinish());
     }
 
-    protected function parseRange($range)
+    protected function parseSlice($range)
     {
-        $range = explode(':', $range);
+        if ($range instanceof Slice) {
 
-        if (!isset($range[1])) {
-
-            $range[1] = $range[0] + 1;
+            return $range;
         }
 
-        return $range;
+        return Slice::createFromString($range);
     }
 
-    protected function loadRange($start, $finish)
+    protected function loadSlice(Slice $slice)
     {
-        return substr($this->data, $start, $finish - $start);
+        $this->checkSlice($slice);
+        return substr($this->data, $slice->getStart(), $slice->getWidth());
     }
 
-    protected function setRange($start, $finish, $value)
+    protected function setSlice(Slice $slice, $value)
     {
-        $width = $finish - $start;
-        $value = substr($value, 0, $width);
-        $this->data = substr_replace($this->data, $value, $start, $width);
+        $this->checkSlice($slice);
+        $value = substr($value, 0, $slice->getWidth());
+        $this->data = substr_replace($this->data, $value, $slice->getStart(), $slice->getWidth());
         return $this;
+    }
+
+    protected function checkSlice(Slice $slice)
+    {
+        if ($slice->getFinish() >= strlen($this->data) || $slice->getStart() < 0) {
+
+            throw new \OutOfBoundsException(sprintf('the range %s:%s is outside the width of this line.', $slice->getStart(), $slice->getFinish()));
+        }
     }
 }

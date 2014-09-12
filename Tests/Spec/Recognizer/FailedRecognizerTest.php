@@ -29,7 +29,7 @@ class FailedRecognizerTest extends TestCase
      */
     public function testRecognize()
     {
-        $this->recognizer->recognize(new Line(''), new FileSpec(array(), '', 1));
+        $this->recognizer->recognize(new Line(''), new FileSpec('', array(), 1));
     }
 }
  

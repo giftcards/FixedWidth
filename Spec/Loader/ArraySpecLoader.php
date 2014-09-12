@@ -112,8 +112,8 @@ class ArraySpecLoader implements SpecLoaderInterface
         }
 
         $this->initializedSpecs[$specName] = new FileSpec(
-            $lineSpecs,
             $specName,
+            $lineSpecs,
             $spec['width']
         );
     }
