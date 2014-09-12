@@ -24,10 +24,10 @@ class FieldSpecTest extends TestCase
         $paddingDirection = $this->getFaker()->word;
         $type = $this->getFaker()->word;
         $spec = new FieldSpec(
-            $default,
-            $formatSpecifier,
             $name,
             $slice,
+            $default,
+            $formatSpecifier,
             $paddingChar,
             $paddingDirection,
             $type

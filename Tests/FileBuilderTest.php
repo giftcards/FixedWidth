@@ -32,8 +32,8 @@ class FileBuilderTest extends TestCase
         $this->recordSpec1 = new RecordSpec(
             $this->recordSpec1Name = $this->getFaker()->word,
             array(
-                $field1Name => new FieldSpec($this->getFaker()->word, $this->getFaker()->word, $field1Name, '12:15', '', 'right', 'string'),
-                $field2Name => new FieldSpec(null, $this->getFaker()->word, $field2Name, '17:25', '0', 'left', 'integer')
+                $field1Name => new FieldSpec($field1Name, '12:15', $this->getFaker()->word, $this->getFaker()->word, '', 'right', 'string'),
+                $field2Name => new FieldSpec($field2Name, '17:25', null, $this->getFaker()->word, '0', 'left', 'integer')
             )
         );
         $field1Name = $this->getFaker()->word;
@@ -41,8 +41,8 @@ class FileBuilderTest extends TestCase
         $this->recordSpec2 = new RecordSpec(
             $this->recordSpec2Name = $this->getFaker()->word,
             array(
-                $field1Name => new FieldSpec(null, $this->getFaker()->word, $field1Name, '15:19', '', 'right', 'string'),
-                $field2Name => new FieldSpec($this->getFaker()->word, $this->getFaker()->word, $field2Name, '21:26', '0', 'left', 'integer')
+                $field1Name => new FieldSpec($field1Name, '15:19', null, $this->getFaker()->word, '', 'right', 'string'),
+                $field2Name => new FieldSpec($field2Name, '21:26', $this->getFaker()->word, $this->getFaker()->word, '0', 'left', 'integer')
             )
         );
         $this->builder = new FileBuilder(

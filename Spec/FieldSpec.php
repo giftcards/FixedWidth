@@ -23,10 +23,10 @@ class FieldSpec
     protected $default;
 
     public function __construct(
-        $default,
-        $formatSpecifier,
         $name,
         $slice,
+        $default,
+        $formatSpecifier,
         $paddingChar,
         $paddingDirection,
         $type

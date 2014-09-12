@@ -98,10 +98,10 @@ class ArraySpecLoader implements SpecLoaderInterface
                     $options
                 ));
                 $fieldSpecs[$fieldName] = new FieldSpec(
-                    $options['default'],
-                    $options['format_specifier'],
                     $fieldName,
                     $options['slice'],
+                    $options['default'],
+                    $options['format_specifier'],
                     $options['padding_char'],
                     $options['padding_direction'],
                     $options['type']

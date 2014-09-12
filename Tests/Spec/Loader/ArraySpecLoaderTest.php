@@ -75,9 +75,9 @@ class ArraySpecLoaderTest extends TestCase
 
     public function testLoadWhereFound()
     {
-        $field1Spec = new FieldSpec('hello', 'f', 'field1', '34:36', 'x', FieldSpec::PADDING_DIRECTION_LEFT, 'string');
-        $field2Spec = new FieldSpec(null, 'd', 'field2', '38:42', 'w', FieldSpec::PADDING_DIRECTION_RIGHT, 'string');
-        $field3Spec = new FieldSpec(null, 's', 'field3', '34:56', '', FieldSpec::PADDING_DIRECTION_LEFT, 'integer');
+        $field1Spec = new FieldSpec('field1', '34:36', 'hello', 'f', 'x', FieldSpec::PADDING_DIRECTION_LEFT, 'string');
+        $field2Spec = new FieldSpec('field2', '38:42', null, 'd', 'w', FieldSpec::PADDING_DIRECTION_RIGHT, 'string');
+        $field3Spec = new FieldSpec('field3', '34:56', null, 's', '', FieldSpec::PADDING_DIRECTION_LEFT, 'integer');
         $spec = new FileSpec(
             'spec1',
             array(
