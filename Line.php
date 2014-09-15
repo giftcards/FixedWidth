@@ -23,38 +23,39 @@ class Line implements \ArrayAccess
         return (string)$this->data;
     }
 
-    public function get($start, $finish)
+    public function get($slice)
     {
-        return $this->loadSlice(new Slice($start, $finish));
+        return $this->loadSlice($this->normalizeSlice($slice));
     }
 
-    public function set($start, $finish, $value)
+    public function set($slice, $value)
     {
-        $this->setSlice(new Slice($start, $finish), $value);
+        $this->setSlice($this->normalizeSlice($slice), $value);
         return $this;
     }
 
-    public function has($start, $finish)
+    public function has($slice)
     {
         try {
 
-            $this->loadSlice(new Slice($start, $finish));
+            $this->loadSlice($this->normalizeSlice($slice));
             return true;
         } catch (\OutOfBoundsException $e) {
-
-            return false;
         }
+
+        return false;
     }
 
-    public function remove($start, $finish)
+    public function remove($slice)
     {
+        $slice = $this->normalizeSlice($slice);
         $value = str_repeat(
             ' ',
-            $start,
-            $finish - $start
+            $slice->getWidth()
         );
 
-        return $this->set($start, $start, $value);
+        $this->setSlice($slice, $value);
+        return $this;
     }
 
     public function getLength()
@@ -64,36 +65,32 @@ class Line implements \ArrayAccess
 
     public function offsetExists($offset)
     {
-        $slice = $this->parseSlice($offset);
-        return $this->has($slice->getStart(), $slice->getFinish());
+        return $this->has($offset);
     }
 
     public function offsetGet($offset)
     {
-        $slice = $this->parseSlice($offset);
-        return $this->get($slice->getStart(), $slice->getFinish());
+        return $this->get($offset);
     }
 
     public function offsetSet($offset, $value)
     {
-        $slice = $this->parseSlice($offset);
-        $this->set($slice->getStart(), $slice->getFinish(), $value);
+        $this->set($offset, $value);
     }
 
     public function offsetUnset($offset)
     {
-        $slice = $this->parseSlice($offset);
-        $this->remove($slice->getStart(), $slice->getFinish());
+        $this->remove($offset);
     }
 
-    protected function parseSlice($range)
+    protected function normalizeSlice($slice)
     {
-        if ($range instanceof Slice) {
+        if ($slice instanceof Slice) {
 
-            return $range;
+            return $slice;
         }
 
-        return Slice::createFromString($range);
+        return Slice::createFromString($slice);
     }
 
     protected function loadSlice(Slice $slice)
@@ -112,7 +109,7 @@ class Line implements \ArrayAccess
 
     protected function checkSlice(Slice $slice)
     {
-        if ($slice->getFinish() >= strlen($this->data) || $slice->getStart() < 0) {
+        if ($slice->getFinish() > strlen($this->data) || $slice->getStart() < 0) {
 
             throw new \OutOfBoundsException(sprintf('the slice %s is outside the length %d of this line.', $slice, $this->getLength()));
         }

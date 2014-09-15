@@ -9,6 +9,7 @@
 namespace Giftcards\FixedWidth\Tests\Spec\Loader;
 
 
+use Giftcards\FixedWidth\Slice;
 use Giftcards\FixedWidth\Spec\FieldSpec;
 use Giftcards\FixedWidth\Spec\FileSpec;
 use Giftcards\FixedWidth\Spec\Loader\ArraySpecLoader;
@@ -75,9 +76,9 @@ class ArraySpecLoaderTest extends TestCase
 
     public function testLoadWhereFound()
     {
-        $field1Spec = new FieldSpec('field1', '34:36', 'hello', 'f', 'x', FieldSpec::PADDING_DIRECTION_LEFT, 'string');
-        $field2Spec = new FieldSpec('field2', '38:42', null, 'd', 'w', FieldSpec::PADDING_DIRECTION_RIGHT, 'string');
-        $field3Spec = new FieldSpec('field3', '34:56', null, 's', '', FieldSpec::PADDING_DIRECTION_LEFT, 'integer');
+        $field1Spec = new FieldSpec('field1', Slice::createFromString('34:36'), 'hello', 'f', 'x', FieldSpec::PADDING_DIRECTION_LEFT, 'string');
+        $field2Spec = new FieldSpec('field2', Slice::createFromString('38:42'), null, 'd', 'w', FieldSpec::PADDING_DIRECTION_RIGHT, 'string');
+        $field3Spec = new FieldSpec('field3', Slice::createFromString('34:56'), null, 's', '', FieldSpec::PADDING_DIRECTION_LEFT, 'integer');
         $spec = new FileSpec(
             'spec1',
             array(

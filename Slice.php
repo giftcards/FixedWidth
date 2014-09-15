@@ -13,6 +13,7 @@ class Slice
 {
     protected $start;
     protected $finish;
+    protected $width;
 
     public static function createFromString($string)
     {
@@ -35,6 +36,7 @@ class Slice
 
         $this->finish = $finish;
         $this->start = $start;
+        $this->width = $finish - $start;
     }
 
     public function __toString()
@@ -60,6 +62,6 @@ class Slice
 
     public function getWidth()
     {
-        return $this->finish - $this->start;
+        return $this->width;
     }
 } 

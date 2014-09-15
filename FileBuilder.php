@@ -43,14 +43,13 @@ class FileBuilder
             }
 
             $slice = $fieldSpec->getSlice();
-            $range = explode(':', $slice);
 
             $line[$slice] = sprintf(
                 sprintf(
                     '%%%s%s%s%s',
                     $fieldSpec->getPaddingChar(),
                     $fieldSpec->getPaddingDirection() == FieldSpec::PADDING_DIRECTION_LEFT ? '' : '-',
-                    $range[1] - $range[0],
+                    $slice->getWidth(),
                     $fieldSpec->getFormatSpecifier()
                 ),
                 $value

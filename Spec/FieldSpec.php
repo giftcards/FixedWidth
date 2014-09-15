@@ -9,6 +9,8 @@
 namespace Giftcards\FixedWidth\Spec;
 
 
+use Giftcards\FixedWidth\Slice;
+
 class FieldSpec
 {
     const PADDING_DIRECTION_LEFT = 'left';
@@ -24,7 +26,7 @@ class FieldSpec
 
     public function __construct(
         $name,
-        $slice,
+        Slice $slice,
         $default,
         $formatSpecifier,
         $paddingChar,
@@ -89,7 +91,7 @@ class FieldSpec
     }
 
     /**
-     * @return string
+     * @return Slice
      */
     public function getSlice()
     {

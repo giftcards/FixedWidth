@@ -9,6 +9,7 @@
 namespace Giftcards\FixedWidth\Tests\Spec;
 
 
+use Giftcards\FixedWidth\Slice;
 use Giftcards\FixedWidth\Spec\FieldSpec;
 use Giftcards\FixedWidth\Tests\TestCase;
 
@@ -19,7 +20,7 @@ class FieldSpecTest extends TestCase
         $default = $this->getFaker()->word;
         $formatSpecifier = $this->getFaker()->word;
         $name = $this->getFaker()->word;
-        $slice = $this->getFaker()->word;
+        $slice = Slice::createFromString($this->getFaker()->numberBetween(0, 10).':'.$this->getFaker()->numberBetween(10, 20));
         $paddingChar = $this->getFaker()->word;
         $paddingDirection = $this->getFaker()->word;
         $type = $this->getFaker()->word;

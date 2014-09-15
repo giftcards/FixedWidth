@@ -9,6 +9,7 @@
 namespace Giftcards\FixedWidth\Spec\Loader;
 
 
+use Giftcards\FixedWidth\Slice;
 use Giftcards\FixedWidth\Spec\FileSpec;
 use Giftcards\FixedWidth\Spec\RecordSpec;
 use Giftcards\FixedWidth\Spec\FieldSpec;
@@ -99,7 +100,7 @@ class ArraySpecLoader implements SpecLoaderInterface
                 ));
                 $fieldSpecs[$fieldName] = new FieldSpec(
                     $fieldName,
-                    $options['slice'],
+                    Slice::createFromString($options['slice']),
                     $options['default'],
                     $options['format_specifier'],
                     $options['padding_char'],
