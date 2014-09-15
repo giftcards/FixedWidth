@@ -39,7 +39,13 @@ class FileSpecTest extends TestCase
     {
         $spec = new FileSpec($this->getFaker()->word, array(), $this->getFaker()->numberBetween(10, 20));
         $spec->getRecordSpec('record1');
+    }
 
+    public function testWidthIsAlwaysInt()
+    {
+        $spec1 = new FileSpec('name', array(), 10);
+        $spec2 = new FileSpec('name', array(), '10');
+        $this->assertSame($spec1->getWidth(), $spec2->getWidth());
     }
 }
  

@@ -12,7 +12,7 @@ namespace Giftcards\FixedWidth;
 class File implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     protected $name;
-    protected $lines;
+    protected $lines = array();
     protected $width;
 
     public function __construct($name, $width, array $lines = array())

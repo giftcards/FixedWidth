@@ -20,7 +20,7 @@ class FileSpec
     {
         $this->recordSpecs = $recordSpecs;
         $this->name = $name;
-        $this->width = $width;
+        $this->width = (int)$width;
     }
 
     /**
@@ -55,4 +55,4 @@ class FileSpec
     {
         return $this->width;
     }
-} 
+}

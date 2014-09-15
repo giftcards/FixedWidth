@@ -28,7 +28,7 @@ class ArraySpecLoaderTest extends TestCase
                 'width' => 78,
                 'field_types' => array(
                     'string' => array(
-                        'format_specifier' => 'd',
+                        'format_specifier' => 's',
                         'padding_char' => 'w',
                         'padding_direction' => FieldSpec::PADDING_DIRECTION_RIGHT
                     ),
@@ -39,14 +39,14 @@ class ArraySpecLoaderTest extends TestCase
                         'field1' => array(
                             'type' => 'string',
                             'default' => 'hello',
-                            'slice' => '34:36',
-                            'format_specifier' => 'f',
+                            'slice' => '34:39',
+                            'format_specifier' => '.2f',
                             'padding_char' => 'x',
                             'padding_direction' => FieldSpec::PADDING_DIRECTION_LEFT
                         ),
                         'field2' => array(
                             'type' => 'string',
-                            'slice' => '38:42',
+                            'slice' => '40:42',
                         ),
                     ),
                     'record2' => array(
@@ -76,8 +76,8 @@ class ArraySpecLoaderTest extends TestCase
 
     public function testLoadWhereFound()
     {
-        $field1Spec = new FieldSpec('field1', Slice::createFromString('34:36'), 'hello', 'f', 'x', FieldSpec::PADDING_DIRECTION_LEFT, 'string');
-        $field2Spec = new FieldSpec('field2', Slice::createFromString('38:42'), null, 'd', 'w', FieldSpec::PADDING_DIRECTION_RIGHT, 'string');
+        $field1Spec = new FieldSpec('field1', Slice::createFromString('34:39'), 'hello', '.2f', 'x', FieldSpec::PADDING_DIRECTION_LEFT, 'string');
+        $field2Spec = new FieldSpec('field2', Slice::createFromString('40:42'), null, 's', 'w', FieldSpec::PADDING_DIRECTION_RIGHT, 'string');
         $field3Spec = new FieldSpec('field3', Slice::createFromString('34:56'), null, 's', '', FieldSpec::PADDING_DIRECTION_LEFT, 'integer');
         $spec = new FileSpec(
             'spec1',

@@ -14,13 +14,12 @@ use Giftcards\FixedWidth\Spec\FileSpec;
 use Giftcards\FixedWidth\Spec\RecordSpec;
 use Giftcards\FixedWidth\Spec\FieldSpec;
 use Giftcards\FixedWidth\Spec\SpecNotFoundException;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ArraySpecLoader implements SpecLoaderInterface
 {
-    protected $arraySpecs = [];
-    protected $initializedSpecs = [];
+    protected $arraySpecs = array();
+    protected $initializedSpecs = array();
 
     public function __construct(array $specs)
     {
@@ -48,27 +47,27 @@ class ArraySpecLoader implements SpecLoaderInterface
 
         $fileOptionsResolver = new OptionsResolver();
         $fileOptionsResolver
-            ->setRequired(['width'])
-            ->setDefaults(['field_types' => [], 'record_types' => []])
-            ->setAllowedTypes(['field_types' => 'array', 'record_types' => 'array'])
+            ->setRequired(array('width'))
+            ->setDefaults(array('field_types' => array(), 'record_types' => array()))
+            ->setAllowedTypes(array('field_types' => 'array', 'record_types' => 'array'))
         ;
         $fieldTypeOptionsResolver = new OptionsResolver();
         $fieldTypeOptionsResolver
-            ->setDefaults([
-                    'padding_direction' => FieldSpec::PADDING_DIRECTION_LEFT,
-                    'padding_char' => '',
-                    'format_specifier' => 's',
-                ])
-            ->setAllowedTypes([
-                    'padding_char' => 'scalar',
-                    'format_specifier' => 'string'
-                ])
-            ->setAllowedValues([
-                    'padding_direction' => [
-                        FieldSpec::PADDING_DIRECTION_LEFT,
-                        FieldSpec::PADDING_DIRECTION_RIGHT
-                    ]
-                ])
+            ->setDefaults(array(
+                'padding_direction' => FieldSpec::PADDING_DIRECTION_LEFT,
+                'padding_char' => '',
+                'format_specifier' => 's',
+            ))
+            ->setAllowedTypes(array(
+                'padding_char' => 'scalar',
+                'format_specifier' => 'string'
+            ))
+            ->setAllowedValues(array(
+                'padding_direction' => array(
+                    FieldSpec::PADDING_DIRECTION_LEFT,
+                    FieldSpec::PADDING_DIRECTION_RIGHT
+                )
+            ))
         ;
 
 
@@ -81,16 +80,16 @@ class ArraySpecLoader implements SpecLoaderInterface
 
         $fieldOptionsResolver = clone $fieldTypeOptionsResolver;
         $fieldOptionsResolver
-            ->setRequired(['type', 'slice'])
-            ->setDefaults(['default' => null])
-            ->setAllowedValues(['type' => array_keys($spec['field_types'])])
+            ->setRequired(array('type', 'slice'))
+            ->setDefaults(array('default' => null))
+            ->setAllowedValues(array('type' => array_keys($spec['field_types'])))
         ;
 
-        $lineSpecs = [];
+        $lineSpecs = array();
 
         foreach ($spec['record_types'] as $name => $lineType) {
 
-            $fieldSpecs = [];
+            $fieldSpecs = array();
 
             foreach ($lineType as $fieldName => $options) {
 

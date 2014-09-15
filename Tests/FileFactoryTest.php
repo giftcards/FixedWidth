@@ -14,6 +14,7 @@ use Giftcards\FixedWidth\FileBuilder;
 use Giftcards\FixedWidth\FileFactory;
 use Giftcards\FixedWidth\FileReader;
 use Giftcards\FixedWidth\Spec\FileSpec;
+use Giftcards\FixedWidth\Spec\ValueFormatter\SprintfValueFormatter;
 use Mockery\MockInterface;
 
 class FileFactoryTest extends TestCase
@@ -62,7 +63,7 @@ class FileFactoryTest extends TestCase
             ->with($specName)
             ->andReturn($spec)
         ;
-        $this->assertEquals(new FileBuilder($name, $spec), $this->factory->createBuilder($name, $specName));
+        $this->assertEquals(new FileBuilder($name, $spec, new SprintfValueFormatter()), $this->factory->createBuilder($name, $specName));
     }
 
     public function testCreateFromFile()
@@ -95,13 +96,13 @@ class FileFactoryTest extends TestCase
             ->with($specName)
             ->andReturn($spec)
         ;
-        $this->assertEquals(new FileReader($file, $spec), $this->factory->createReader($file, $specName));
+        $this->assertEquals(new FileReader($file, $spec, new SprintfValueFormatter()), $this->factory->createReader($file, $specName));
         $recognizer = \Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface');
         $this->factory->addRecordSpecRecognizer(
             $specName,
             $recognizer
         );
-        $this->assertEquals(new FileReader($file, $spec, $recognizer), $this->factory->createReader($file, $specName));
+        $this->assertEquals(new FileReader($file, $spec, new SprintfValueFormatter(), $recognizer), $this->factory->createReader($file, $specName));
     }
 }
  

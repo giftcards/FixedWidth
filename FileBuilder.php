@@ -9,18 +9,20 @@
 namespace Giftcards\FixedWidth;
 
 
-use Giftcards\FixedWidth\Spec\FieldSpec;
 use Giftcards\FixedWidth\Spec\FileSpec;
+use Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface;
 
 class FileBuilder
 {
     protected $file;
     protected $spec;
+    protected $formatter;
 
-    public function __construct($name, FileSpec $spec)
+    public function __construct($name, FileSpec $spec, ValueFormatterInterface $formatter)
     {
         $this->spec = $spec;
         $this->file = new File($name, $spec->getWidth());
+        $this->formatter = $formatter;
     }
 
     public function getFile()
@@ -42,16 +44,8 @@ class FileBuilder
                 throw new FieldRequiredException($recordSpecName, $fieldSpec);
             }
 
-            $slice = $fieldSpec->getSlice();
-
-            $line[$slice] = sprintf(
-                sprintf(
-                    '%%%s%s%s%s',
-                    $fieldSpec->getPaddingChar(),
-                    $fieldSpec->getPaddingDirection() == FieldSpec::PADDING_DIRECTION_LEFT ? '' : '-',
-                    $slice->getWidth(),
-                    $fieldSpec->getFormatSpecifier()
-                ),
+            $line[$fieldSpec->getSlice()] = $this->formatter->formatToFile(
+                $fieldSpec,
                 $value
             );
         }

@@ -13,20 +13,24 @@ use Giftcards\FixedWidth\Spec\FieldSpec;
 use Giftcards\FixedWidth\Spec\FileSpec;
 use Giftcards\FixedWidth\Spec\Recognizer\FailedRecognizer;
 use Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface;
+use Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface;
 
 class FileReader
 {
     protected $file;
     protected $spec;
+    protected $formatter;
     protected $recognizer;
 
     public function __construct(
         File $file,
         FileSpec $spec,
+        ValueFormatterInterface $formatter,
         RecordSpecRecognizerInterface $recognizer = null
     ) {
         $this->spec = $spec;
         $this->file = $file;
+        $this->formatter = $formatter;
         $this->recognizer = $recognizer ?: new FailedRecognizer();
     }
 
@@ -35,39 +39,41 @@ class FileReader
         return $this->file;
     }
 
-    public function parseField($lineNumber, $fieldName, $recordSpecName = null)
+    public function parseField($lineIndex, $fieldName, $recordSpecName = null)
     {
-        $line = $this->file[$lineNumber];
+        $line = $this->file[$lineIndex];
 
         $fieldSpec = $this->spec
             ->getRecordSpec($recordSpecName ?: $this->recognizer->recognize($line, $this->spec))
             ->getFieldSpec($fieldName)
         ;
 
-        return $line[$fieldSpec->getSlice()];
+        return $this->formatter->formatFromFile($fieldSpec ,$line[$fieldSpec->getSlice()]);
     }
 
-    public function parseLine($lineNumber, $recordSpecName = null)
+    public function parseLine($lineIndex, $recordSpecName = null)
     {
-        $line = $this->file[$lineNumber];
+        $line = $this->file[$lineIndex];
 
         $fieldSpecs = $this->spec
             ->getRecordSpec($recordSpecName ?: $this->recognizer->recognize($line, $this->spec))
             ->getFieldSpecs()
         ;
 
-        return array_map(function(FieldSpec $fieldSpec) use ($line)
+        $formatter = $this->formatter;
+
+        return array_map(function(FieldSpec $fieldSpec) use ($line, $formatter)
         {
-            return $line[$fieldSpec->getSlice()];
+            return $formatter->formatFromFile($fieldSpec ,$line[$fieldSpec->getSlice()]);
         }, $fieldSpecs);
     }
 
     /**
-     * @param $lineNumber
+     * @param $lineIndex
      * @return string
      */
-    public function getRecordSpecName($lineNumber)
+    public function getRecordSpecName($lineIndex)
     {
-        return $this->recognizer->recognize($this->file[$lineNumber], $this->spec);
+        return $this->recognizer->recognize($this->file[$lineIndex], $this->spec);
     }
 }

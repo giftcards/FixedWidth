@@ -102,7 +102,7 @@ class Line implements \ArrayAccess
     protected function setSlice(Slice $slice, $value)
     {
         $this->checkSlice($slice);
-        $value = substr($value, 0, $slice->getWidth());
+        $value = str_pad(substr($value, 0, $slice->getWidth()), $slice->getWidth(), ' ', STR_PAD_RIGHT);
         $this->data = substr_replace($this->data, $value, $slice->getStart(), $slice->getWidth());
         return $this;
     }

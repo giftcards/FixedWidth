@@ -20,7 +20,7 @@ abstract class AbstractSpecFileLoader extends ArraySpecLoader
     public function __construct(FileLocatorInterface $fileLocator)
     {
         $this->fileLocator = $fileLocator;
-        parent::__construct([]);
+        parent::__construct(array());
     }
 
     public function initializeSpec($name)

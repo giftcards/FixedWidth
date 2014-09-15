@@ -44,5 +44,13 @@ class LineTest extends TestCase
         unset($line['6:9']);
         $this->assertEquals('          ', (string)$line);
     }
+
+    public function testSetWhereValueSetIsntAsLongAsSlice()
+    {
+        $line = new Line(10);
+
+        $line['0:5'] = 'we';
+        $this->assertEquals('we        ', (string)$line);
+    }
 }
  

@@ -1,7 +1,7 @@
 width: 78,
 field_types:
     string:
-        format_specifier: d
+        format_specifier: s
         padding_char: w
         padding_direction: right
     integer: []
@@ -10,13 +10,13 @@ record_types:
         field1:
             type: string
             default: hello
-            slice: 34:36
-            format_specifier: f
+            slice: 34:39
+            format_specifier: .2f
             padding_char: x
             padding_direction: left
         field2:
             type: string
-            slice: 38:42
+            slice: 40:42
     record2:
         field3:
             type: integer
