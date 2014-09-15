@@ -13,6 +13,15 @@ use Giftcards\FixedWidth\Spec\FieldSpec;
 
 class SprintfValueFormatter implements ValueFormatterInterface
 {
+    protected $typeSpecifierMap = array(
+        'b' => 'integer',
+        'd' => 'integer',
+        'f' => 'float',
+        'F' => 'float',
+        'o' => 'integer',
+        'u' => 'integer'
+    );
+
     public function formatToFile(FieldSpec $spec, $value)
     {
         $slice = $spec->getSlice();
@@ -23,6 +32,14 @@ class SprintfValueFormatter implements ValueFormatterInterface
 
             $paddingChar = "'".$paddingChar;
         }
+
+        var_dump(sprintf(
+                '%%%s%s%s%s',
+                $paddingChar,
+                $spec->getPaddingDirection() == FieldSpec::PADDING_DIRECTION_LEFT ? '' : '-',
+                $slice->getWidth(),
+                $spec->getFormatSpecifier()
+            ));
 
         return sprintf(
             sprintf(
@@ -38,6 +55,14 @@ class SprintfValueFormatter implements ValueFormatterInterface
 
     public function formatFromFile(FieldSpec $spec, $value)
     {
+        $type = 'string';
+
+        if (isset($this->typeSpecifierMap[substr($spec->getFormatSpecifier(), -1)])) {
+
+            $type = $this->typeSpecifierMap[substr($spec->getFormatSpecifier(), -1)];
+        }
+
+        settype($value, $type);
         return $value;
     }
 }
