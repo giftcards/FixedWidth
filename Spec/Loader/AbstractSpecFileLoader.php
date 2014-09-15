@@ -39,6 +39,16 @@ abstract class AbstractSpecFileLoader extends ArraySpecLoader
         parent::initializeSpec($name);
     }
 
+    /**
+     * @param $name
+     * @return string
+     */
     abstract protected function getFileName($name);
+
+    /**
+     * @param $path
+     * @param $name
+     * @return array
+     */
     abstract protected function loadSpecFile($path, $name);
 } 
