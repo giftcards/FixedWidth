@@ -26,9 +26,7 @@ class FileFactoryTest extends TestCase
 
     public function setUp()
     {
-        $this->factory = new FileFactory(
-            $this->specLoader = \Mockery::mock('Giftcards\FixedWidth\Spec\Loader\SpecLoaderInterface')
-        );
+        $this->factory = new FileFactory();
     }
 
     public function testCreate()
@@ -39,31 +37,6 @@ class FileFactoryTest extends TestCase
             $name,
             $width
         ));
-    }
-
-    public function testRecordSpecRecognizerManagement()
-    {
-        $recognizer = \Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface');
-        $specName = $this->getFaker()->word;
-        $this->assertSame($this->factory, $this->factory->addRecordSpecRecognizer(
-            $specName,
-            $recognizer
-        ));
-        $this->assertEquals(array($specName => $recognizer), $this->factory->getRecordSpecRecognizers());
-    }
-
-    public function testCreateBuilder()
-    {
-        $specName = $this->getFaker()->word;
-        $name = $this->getFaker()->word;
-        $spec = new FileSpec('', array(), 0, "\r\n");
-        $this->specLoader
-            ->shouldReceive('loadSpec')
-            ->once()
-            ->with($specName)
-            ->andReturn($spec)
-        ;
-        $this->assertEquals(new FileBuilder($name, $spec, new SprintfValueFormatter()), $this->factory->createBuilder($name, $specName));
     }
 
     public function testCreateFromFile()
@@ -83,26 +56,6 @@ class FileFactoryTest extends TestCase
     public function testCreateFromFileWhereFileIsEmpty()
     {
         $this->factory->createFromFile(new \SplFileInfo(__DIR__.'/Fixtures/empty_fixed_width.txt'));
-    }
-
-    public function testCreateReader()
-    {
-        $specName = $this->getFaker()->word;
-        $spec = new FileSpec('', array(), 0, "\r\n");
-        $file = new File('', 0);
-        $this->specLoader
-            ->shouldReceive('loadSpec')
-            ->twice()
-            ->with($specName)
-            ->andReturn($spec)
-        ;
-        $this->assertEquals(new FileReader($file, $spec, new SprintfValueFormatter()), $this->factory->createReader($file, $specName));
-        $recognizer = \Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface');
-        $this->factory->addRecordSpecRecognizer(
-            $specName,
-            $recognizer
-        );
-        $this->assertEquals(new FileReader($file, $spec, new SprintfValueFormatter(), $recognizer), $this->factory->createReader($file, $specName));
     }
 }
  

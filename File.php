@@ -23,7 +23,7 @@ class File implements \ArrayAccess, \Countable, \IteratorAggregate
         $lineSeparator = "\r\n"
     ) {
         $this->name = $name;
-        $this->width = $width;
+        $this->width = (int)$width;
         array_walk($lines, array($this, 'addLine'));
         $this->lineSeparator = $lineSeparator;
     }
@@ -108,6 +108,14 @@ class File implements \ArrayAccess, \Countable, \IteratorAggregate
     {
         $this->lines[] = $line = new Line($this->width);
         return $line;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWidth()
+    {
+        return $this->width;
     }
 
     protected function validateLine($line)

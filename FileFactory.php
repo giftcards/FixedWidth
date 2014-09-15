@@ -16,40 +16,9 @@ use Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface;
 
 class FileFactory
 {
-    protected $specLoader;
-    protected $formatter;
-    protected $recordSpecRecognizers = array();
-
-    public function __construct(SpecLoaderInterface $specLoader, ValueFormatterInterface $formatter = null)
-    {
-        $this->specLoader = $specLoader;
-        $this->formatter = $formatter ?: new SprintfValueFormatter();
-    }
-
-    public function addRecordSpecRecognizer(
-        $specName,
-        RecordSpecRecognizerInterface $recognizer
-    ) {
-        $this->recordSpecRecognizers[$specName] = $recognizer;
-        return $this;
-    }
-
-    /**
-     * @return RecordSpecRecognizerInterface[]
-     */
-    public function getRecordSpecRecognizers()
-    {
-        return $this->recordSpecRecognizers;
-    }
-
     public function create($name, $width, $lineSeparator = "\r\n")
     {
         return new File($name, $width, array(), $lineSeparator);
-    }
-
-    public function createBuilder($name, $specName)
-    {
-        return new FileBuilder($name, $this->specLoader->loadSpec($specName), $this->formatter);
     }
 
     public function createFromFile(\SplFileInfo $file, $lineSeparator = "\r\n")
@@ -65,16 +34,6 @@ class FileFactory
             $file->getFilename(),
             $width,
             $lines
-        );
-    }
-
-    public function createReader(File $file, $specName)
-    {
-        return new FileReader(
-            $file,
-            $this->specLoader->loadSpec($specName),
-            $this->formatter,
-            isset($this->recordSpecRecognizers[$specName]) ? $this->recordSpecRecognizers[$specName] : null
         );
     }
 } 
