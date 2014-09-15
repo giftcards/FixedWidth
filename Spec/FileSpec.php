@@ -15,12 +15,14 @@ class FileSpec
     protected $recordSpecs;
     protected $name;
     protected $width;
+    protected $lineSeparator;
 
-    public function __construct($name, array $recordSpecs, $width)
+    public function __construct($name, array $recordSpecs, $width, $lineSeparator)
     {
         $this->recordSpecs = $recordSpecs;
         $this->name = $name;
         $this->width = (int)$width;
+        $this->lineSeparator = (string)$lineSeparator;
     }
 
     /**
@@ -54,5 +56,13 @@ class FileSpec
     public function getWidth()
     {
         return $this->width;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLineSeparator()
+    {
+        return $this->lineSeparator;
     }
 }

@@ -1,4 +1,5 @@
 width: 78,
+line_separator: "\n"
 field_types:
     string:
         format_specifier: s

@@ -25,11 +25,12 @@ class FileSpecTest extends TestCase
             'record2' => $recordSpec2,
         );
         $width = $this->getFaker()->numberBetween(10, 20);
-        $spec = new FileSpec($name, $recordSpecs, $width);
+        $spec = new FileSpec($name, $recordSpecs, $width, "\r\n");
         $this->assertEquals($name, $spec->getName());
         $this->assertSame($recordSpecs, $spec->getRecordSpecs());
         $this->assertSame($recordSpec1, $spec->getRecordSpec('record1'));
         $this->assertSame($recordSpec2, $spec->getRecordSpec('record2'));
+        $this->assertEquals("\r\n", $spec->getLineSeparator());
     }
 
     /**
@@ -37,14 +38,14 @@ class FileSpecTest extends TestCase
      */
     public function testGetFieldSpecWhereNotThere()
     {
-        $spec = new FileSpec($this->getFaker()->word, array(), $this->getFaker()->numberBetween(10, 20));
+        $spec = new FileSpec($this->getFaker()->word, array(), $this->getFaker()->numberBetween(10, 20), "\r\n");
         $spec->getRecordSpec('record1');
     }
 
     public function testWidthIsAlwaysInt()
     {
-        $spec1 = new FileSpec('name', array(), 10);
-        $spec2 = new FileSpec('name', array(), '10');
+        $spec1 = new FileSpec('name', array(), 10, "\r\n");
+        $spec2 = new FileSpec('name', array(), '10', "\r\n");
         $this->assertSame($spec1->getWidth(), $spec2->getWidth());
     }
 }

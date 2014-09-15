@@ -48,8 +48,16 @@ class ArraySpecLoader implements SpecLoaderInterface
         $fileOptionsResolver = new OptionsResolver();
         $fileOptionsResolver
             ->setRequired(array('width'))
-            ->setDefaults(array('field_types' => array(), 'record_types' => array()))
-            ->setAllowedTypes(array('field_types' => 'array', 'record_types' => 'array'))
+            ->setDefaults(array(
+                'field_types' => array(),
+                'record_types' => array(),
+                'line_separator' => "\r\n"
+            ))
+            ->setAllowedTypes(array(
+                'field_types' => 'array',
+                'record_types' => 'array',
+                'line_separator' => 'string'
+            ))
         ;
         $fieldTypeOptionsResolver = new OptionsResolver();
         $fieldTypeOptionsResolver
@@ -114,7 +122,8 @@ class ArraySpecLoader implements SpecLoaderInterface
         $this->initializedSpecs[$specName] = new FileSpec(
             $specName,
             $lineSpecs,
-            $spec['width']
+            $spec['width'],
+            $spec['line_separator']
         );
     }
 }

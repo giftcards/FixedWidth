@@ -42,9 +42,9 @@ class FileFactory
         return $this->recordSpecRecognizers;
     }
 
-    public function create($name, $width)
+    public function create($name, $width, $lineSeparator = "\r\n")
     {
-        return new File($name, $width);
+        return new File($name, $width, array(), $lineSeparator);
     }
 
     public function createBuilder($name, $specName)
@@ -52,9 +52,9 @@ class FileFactory
         return new FileBuilder($name, $this->specLoader->loadSpec($specName), $this->formatter);
     }
 
-    public function createFromFile(\SplFileInfo $file)
+    public function createFromFile(\SplFileInfo $file, $lineSeparator = "\r\n")
     {
-        $lines = explode("\r\n", file_get_contents($file->getRealPath()));
+        $lines = explode($lineSeparator, file_get_contents($file->getRealPath()));
 
         if (!($width = strlen($lines[0]))) {
 

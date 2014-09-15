@@ -56,7 +56,7 @@ class FileFactoryTest extends TestCase
     {
         $specName = $this->getFaker()->word;
         $name = $this->getFaker()->word;
-        $spec = new FileSpec('', array(), 0);
+        $spec = new FileSpec('', array(), 0, "\r\n");
         $this->specLoader
             ->shouldReceive('loadSpec')
             ->once()
@@ -88,7 +88,7 @@ class FileFactoryTest extends TestCase
     public function testCreateReader()
     {
         $specName = $this->getFaker()->word;
-        $spec = new FileSpec('', array(), 0);
+        $spec = new FileSpec('', array(), 0, "\r\n");
         $file = new File('', 0);
         $this->specLoader
             ->shouldReceive('loadSpec')

@@ -21,7 +21,12 @@ class FileBuilder
     public function __construct($name, FileSpec $spec, ValueFormatterInterface $formatter)
     {
         $this->spec = $spec;
-        $this->file = new File($name, $spec->getWidth());
+        $this->file = new File(
+            $name,
+            $spec->getWidth(),
+            array(),
+            $this->spec->getLineSeparator()
+        );
         $this->formatter = $formatter;
     }
 
@@ -33,7 +38,7 @@ class FileBuilder
     public function addRecord($recordSpecName, array $data)
     {
         $recordSpec = $this->spec->getRecordSpec($recordSpecName);
-        $this->file[] = $line = new Line($this->spec->getWidth());
+        $line = $this->file->newLine();
 
         foreach ($recordSpec->getFieldSpecs() as $name => $fieldSpec) {
 

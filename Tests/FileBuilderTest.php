@@ -103,10 +103,12 @@ class FileBuilderTest extends TestCase
         $line2['34:39'] = 'x3.00';
         $line2['40:42'] = 'hw';
         $line3['34:56'] = '                 12345';
-        $file = new File($this->fileName, $this->spec->getWidth());
-        $file[] = $line1;
-        $file[] = $line2;
-        $file[] = $line3;
+        $file = new File($this->fileName, $this->spec->getWidth(), array(
+            $line1,
+            $line2,
+            $line3
+        ), "\n");
+
         $this->assertEquals($file, $this->builder->getFile());
     }
 

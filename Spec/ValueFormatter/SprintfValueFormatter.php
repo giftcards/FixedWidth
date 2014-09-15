@@ -33,14 +33,6 @@ class SprintfValueFormatter implements ValueFormatterInterface
             $paddingChar = "'".$paddingChar;
         }
 
-        var_dump(sprintf(
-                '%%%s%s%s%s',
-                $paddingChar,
-                $spec->getPaddingDirection() == FieldSpec::PADDING_DIRECTION_LEFT ? '' : '-',
-                $slice->getWidth(),
-                $spec->getFormatSpecifier()
-            ));
-
         return sprintf(
             sprintf(
                 '%%%s%s%s%s',

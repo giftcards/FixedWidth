@@ -12,19 +12,25 @@ namespace Giftcards\FixedWidth;
 class File implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     protected $name;
-    protected $lines = array();
     protected $width;
+    protected $lines = array();
+    protected $lineSeparator;
 
-    public function __construct($name, $width, array $lines = array())
-    {
+    public function __construct(
+        $name,
+        $width,
+        array $lines = array(),
+        $lineSeparator = "\r\n"
+    ) {
         $this->name = $name;
         $this->width = $width;
         array_walk($lines, array($this, 'addLine'));
+        $this->lineSeparator = $lineSeparator;
     }
 
     public function __toString()
     {
-        return implode("\r\n", $this->lines);
+        return implode($this->lineSeparator, $this->lines);
     }
 
     /**
@@ -96,6 +102,12 @@ class File implements \ArrayAccess, \Countable, \IteratorAggregate
         unset($this->lines[$index]);
         $this->lines = array_values($this->lines);
         return $this;
+    }
+
+    public function newLine()
+    {
+        $this->lines[] = $line = new Line($this->width);
+        return $line;
     }
 
     protected function validateLine($line)
