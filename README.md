@@ -229,7 +229,7 @@ it checks for.
 
 ### Value Formatters ###
 
-vlaue formatters are the classes that actually use the info in the field specs
+value formatters are the classes that actually use the info in the field specs
 to format the value going in along with padding etc. they also are given the opportunity
 to format the value when it is read. the default implementation used is the `SprintfValueFormatter`
 it will use sprintf to format values for adding to the file line and will try to infer
