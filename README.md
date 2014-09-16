@@ -156,3 +156,42 @@ this will output
                                   x2.30 hi
                                                    12345
 ```
+
+#### Reading a file ####
+
+you can also use the spec to read already built files. say you saved the above output
+to a file you can load it and read the fields or read a whole line to an array
+
+```php
+<?php
+
+use Giftcards\FixedWidth\Spec\FileFactory;
+use Giftcards\FixedWidth\Spec\Loader\YamlSpecLoader;
+use Symfony\Component\Config\FileLocator;
+
+$file = new \SplFileInfo('path');
+
+$factory = new FileFactory(new YamlSpecLoader(new FileLocator(__DIR__.'/Tests/Fixtures/')));
+
+
+$reader = $factory->createReader($factory->createFromFile($file), 'spec1');
+
+$field1 = $reader->parseField(
+    0 /* index of the line you want to read */,
+    'field1' /* name of the field you want to read */,
+    'record1' /* record spec name to use */
+);
+
+var_dump($field1); //output will be double(23.34)
+
+$record = $reader->parseLine(0, 'record1');
+var_dump($record); //output will be
+/*
+array(2) {
+  'field1' =>
+  double(23.34)
+  'field2' =>
+  string(2) "go"
+}
+*/
+```
