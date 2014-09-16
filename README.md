@@ -234,3 +234,11 @@ to format the value going in along with padding etc. they also are given the opp
 to format the value when it is read. the default implementation used is the `SprintfValueFormatter`
 it will use sprintf to format values for adding to the file line and will try to infer
 the php type on the way out. all formatters must follow the `ValueFormatterInterface`
+
+to change which value formatter your using pass it as the second arg to the `FileFactory`'s constructor.
+
+```php
+use Giftcards\FixedWidth\Spec\FileFactory;
+
+$factory = new FileFactory($specLoader, $customValueFormatter);
+```
