@@ -195,3 +195,42 @@ array(2) {
 }
 */
 ```
+
+you can also make it so you dont have to pass the record spec name by adding a record
+recognizer. this will be discussed in the advanced section
+
+Advanced
+--------
+
+### record recognizers ###
+
+if all/some of your records have some sort of way that they can be inferred based on the line data
+you can use a record spec recognizer and then you wont have to pass the record spec name
+to parse field and parse line. they must follow the `RecordSpecRecognizerInterface`.
+to enable record recognition for a file spec you call the file factory's `addRecordSpecRecognizer`
+passing the name of the file spec you want it to work with as the first arg and the
+recognizer as the second.
+
+
+```php
+
+$factory->addRecordSpecRecognizer('spec1', $recognizer);
+
+//now when you read a file using spec1 the recognizer will be used if no record
+//spec name is passed as the last arg to parseField and parseLine
+```
+
+there is one recognizer implementation that comes with the library `SpecFieldRecognizer` you can
+give it a field name to look at for to recognize the record by. it will compare the
+field spec default value for that field to the value in the line and if they are
+equal then it will return that record spec name. the field name defaults to $id so
+to make it work make sure records you want automatically recognized have the field
+it checks for.
+
+### Value Formatters ###
+
+vlaue formatters are the classes that actually use the info in the field specs
+to format the value going in along with padding etc. they also are given the opportunity
+to format the value when it is read. the default implementation used is the `SprintfValueFormatter`
+it will use sprintf to format values for adding to the file line and will try to infer
+the php type on the way out. all formatters must follow the `ValueFormatterInterface`
