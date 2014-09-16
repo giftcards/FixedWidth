@@ -57,7 +57,7 @@ echo $file; //this will echo out the whole file line by line seperated by the li
 
 the output of the last echo will look something like this
 
-```txt
+```
 hello world
   wer
 ```
@@ -123,7 +123,7 @@ best way to do it is instantiate an instance of `Giftcards\FixedWidth\Spec\FileF
 this inherits from the base factory class mentioned above and adds some methods for
 dealing with specs. it requires the spec loader to do it's thing.
 
-```
+```php
 <?php
 
 $factory = new FileFactory(new YamlSpecLoader(new FileLocator(__DIR__.'/Tests/Fixtures/'));
