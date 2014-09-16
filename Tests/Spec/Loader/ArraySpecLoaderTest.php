@@ -38,7 +38,7 @@ class ArraySpecLoaderTest extends TestCase
                     'record1' => array(
                         'field1' => array(
                             'type' => 'string',
-                            'default' => 'hello',
+                            'default' => 23.34,
                             'slice' => '34:39',
                             'format_specifier' => '.2f',
                             'padding_char' => 'x',
@@ -76,7 +76,7 @@ class ArraySpecLoaderTest extends TestCase
 
     public function testLoadWhereFound()
     {
-        $field1Spec = new FieldSpec('field1', Slice::createFromString('34:39'), 'hello', '.2f', 'x', FieldSpec::PADDING_DIRECTION_LEFT, 'string');
+        $field1Spec = new FieldSpec('field1', Slice::createFromString('34:39'), 23.34, '.2f', 'x', FieldSpec::PADDING_DIRECTION_LEFT, 'string');
         $field2Spec = new FieldSpec('field2', Slice::createFromString('40:42'), null, 's', 'w', FieldSpec::PADDING_DIRECTION_RIGHT, 'string');
         $field3Spec = new FieldSpec('field3', Slice::createFromString('34:56'), null, 's', '', FieldSpec::PADDING_DIRECTION_LEFT, 'integer');
         $spec = new FileSpec(

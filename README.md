@@ -51,7 +51,7 @@ $line2['0:5'] = 'hello';
 $line2['6:11'] = 'world'; //$line2 now says 'hello world         '
 echo $line2; //the Line class has a __toString method so this will print out the contents
 $file[] = $line1;
-echo $file; //this will echo out the whole file line by line seperated by the line
+echo $file; //this will echo out the whole file line by line separated by the line
 
 ```
 
@@ -64,7 +64,7 @@ hello world
 
 ### File Factory ###
 
-instead of instanciating the file class yourself you can use the file factory
+instead of instantiating the file class yourself you can use the file factory
 to do it the base file factory gives you 2 methods
 
  - create - convenience method to just create a file
@@ -111,7 +111,7 @@ these options.
 
 #### field types ####
 
-very often many fields have the share allot of the above options in common this is
+very often many fields happen to share allot of the above options in common this is
 why when defining a spec definition you can use types to define the shared properties
 then set the field's type and it will inherit all options set for that type. see the above mentioned
 example spec for some more details
@@ -126,8 +126,13 @@ dealing with specs. it requires the spec loader to do it's thing.
 ```php
 <?php
 
-$factory = new FileFactory(new YamlSpecLoader(new FileLocator(__DIR__.'/Tests/Fixtures/'));
-//instanciate a builder
+use Giftcards\FixedWidth\Spec\FileFactory;
+use Giftcards\FixedWidth\Spec\Loader\YamlSpecLoader;
+use Symfony\Component\Config\FileLocator;
+
+
+$factory = new FileFactory(new YamlSpecLoader(new FileLocator(__DIR__.'/Tests/Fixtures/')));
+//instantiate a builder
 $builder = $factory->createBuilder('fileName', 'spec1');
 $builder
     ->addRecord('record1', array(
@@ -135,8 +140,19 @@ $builder
         'field2' => 'go'
     ))
     ->addRecord('record1', array(
-        'field1' => 'world',
+        'field1' => 2.3,
         'field2' => 'hi'
     ))
+    ->addRecord('record2', array(
+        'field3' => 12345
+    ))
 ;
+echo $builder->getFile();
+```
+this will output
+
+```
+                                  23.34 go
+                                  x2.30 hi
+                                                   12345
 ```

@@ -10,7 +10,7 @@ record_types:
     record1:
         field1:
             type: string
-            default: hello
+            default: 23.34
             slice: 34:39
             format_specifier: .2f
             padding_char: x

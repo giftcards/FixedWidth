@@ -45,9 +45,9 @@ class FileBuilderTest extends TestCase
             ->once()
             ->with(
                 $this->spec->getRecordSpec('record1')->getFieldSpec('field1'),
-                'hello'
+                23.34
             )
-            ->andReturn('x0.00')
+            ->andReturn('23.34')
             ->getMock()
             ->shouldReceive('formatToFile')
             ->once()
@@ -98,7 +98,7 @@ class FileBuilderTest extends TestCase
         $line1 = new Line($this->spec->getWidth());
         $line2 = new Line($this->spec->getWidth());
         $line3 = new Line($this->spec->getWidth());
-        $line1['34:39'] = 'x0.00';
+        $line1['34:39'] = '23.34';
         $line1['40:42'] = 'go';
         $line2['34:39'] = 'x3.00';
         $line2['40:42'] = 'hw';
