@@ -30,6 +30,12 @@ class FileFactory
             throw new \InvalidArgumentException('The file you\'ve passed is empty and therefore the width cannot be inferred.');
         }
 
+        //if a file had a trailing line ending remove the last line since it will make the file instance throw an exception
+        if (strlen(end($lines)) == 0) {
+
+            array_pop($lines);
+        }
+
         return new File(
             $file->getFilename(),
             $width,
