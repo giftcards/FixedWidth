@@ -14,8 +14,9 @@ use Giftcards\FixedWidth\Spec\FileSpec;
 use Giftcards\FixedWidth\Spec\Recognizer\FailedRecognizer;
 use Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface;
 use Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface;
+use Traversable;
 
-class FileReader
+class FileReader implements \IteratorAggregate, \ArrayAccess, \Countable
 {
     protected $file;
     protected $spec;
@@ -23,7 +24,7 @@ class FileReader
     protected $recognizer;
 
     public function __construct(
-        File $file,
+        FileInterface $file,
         FileSpec $spec,
         ValueFormatterInterface $formatter,
         RecordSpecRecognizerInterface $recognizer = null
@@ -34,38 +35,44 @@ class FileReader
         $this->recognizer = $recognizer ?: new FailedRecognizer();
     }
 
+    /**
+     * @return FileInterface
+     */
     public function getFile()
     {
         return $this->file;
     }
 
+    /**
+     * @param $lineIndex
+     * @param $fieldName
+     * @param null $recordSpecName
+     * @return mixed
+     */
     public function parseField($lineIndex, $fieldName, $recordSpecName = null)
     {
-        $line = $this->file[$lineIndex];
-
-        $fieldSpec = $this->spec
-            ->getRecordSpec($recordSpecName ?: $this->recognizer->recognize($line, $this->spec))
-            ->getFieldSpec($fieldName)
-        ;
-
-        return $this->formatter->formatFromFile($fieldSpec ,$line[$fieldSpec->getSlice()]);
+        return $this->getLineReader($lineIndex, $recordSpecName)->getField($fieldName);
     }
 
+    /**
+     * @param $lineIndex
+     * @param null $recordSpecName
+     * @return array
+     */
     public function parseLine($lineIndex, $recordSpecName = null)
     {
-        $line = $this->file[$lineIndex];
+        return $this->getLineReader($lineIndex, $recordSpecName)->getFields();
+    }
 
-        $fieldSpecs = $this->spec
+    public function getLineReader($lineIndex, $recordSpecName = null)
+    {
+        $line = $this->file->getLine($lineIndex);
+
+        $recordSpec = $this->spec
             ->getRecordSpec($recordSpecName ?: $this->recognizer->recognize($line, $this->spec))
-            ->getFieldSpecs()
         ;
 
-        $formatter = $this->formatter;
-
-        return array_map(function(FieldSpec $fieldSpec) use ($line, $formatter)
-        {
-            return $formatter->formatFromFile($fieldSpec ,$line[$fieldSpec->getSlice()]);
-        }, $fieldSpecs);
+        return new LineReader($line, $recordSpec, $this->formatter);
     }
 
     /**
@@ -74,6 +81,62 @@ class FileReader
      */
     public function getRecordSpecName($lineIndex)
     {
-        return $this->recognizer->recognize($this->file[$lineIndex], $this->spec);
+        return $this->recognizer->recognize($this->file->getLine($lineIndex), $this->spec);
+    }
+
+    /**
+     * @return LineToReaderIterator
+     */
+    public function getIterator()
+    {
+        return new LineToReaderIterator(
+            $this->file,
+            $this->spec,
+            $this->recognizer,
+            $this->formatter
+        );
+    }
+
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->file[$offset]);
+    }
+
+    /**
+     * @param mixed $offset
+     * @return LineReader
+     */
+    public function offsetGet($offset)
+    {
+        return $this->getLineReader($offset);
+    }
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new \BadMethodCallException('a file reader is read only.');
+    }
+
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset($offset)
+    {
+        throw new \BadMethodCallException('a file reader is read only.');
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->file);
     }
 }

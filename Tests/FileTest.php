@@ -38,10 +38,13 @@ class FileTest extends TestCase
 
     public function testGettersSetters()
     {
+        $this->assertEquals($this->width, $this->file->getWidth());
+        $this->assertEquals("\r\n", $this->file->getLineSeparator());
         $this->assertEquals(
             array(new Line($this->line1), $this->line2),
             $this->file->getLines()
         );
+        $this->assertSame($this->line2, $this->file->getLine(1));
         $this->assertEquals($this->line1."\r\n".$this->line2, $this->file);
         $this->assertTrue(isset($this->file[0]));
         $this->assertTrue(isset($this->file[1]));
@@ -106,6 +109,14 @@ class FileTest extends TestCase
     public function testSetLineWhereLengthIsWrong()
     {
         $this->file->setLine(4, new Line($this->width - 1));
+    }
+
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testGetLineWhereOutOfBounds()
+    {
+        $this->file->getLine(5);
     }
 }
  

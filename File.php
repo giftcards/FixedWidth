@@ -9,7 +9,7 @@
 namespace Giftcards\FixedWidth;
 
 
-class File implements \ArrayAccess, \Countable, \IteratorAggregate
+class File implements \IteratorAggregate, \ArrayAccess, FileInterface
 {
     protected $name;
     protected $width;
@@ -41,6 +41,16 @@ class File implements \ArrayAccess, \Countable, \IteratorAggregate
         return $this->lines;
     }
 
+    public function getLine($index)
+    {
+        if ($index >= $this->count()) {
+
+            throw new \OutOfBoundsException('The index is outside of the available indexes of lines.');
+        }
+
+        return $this->lines[$index];
+    }
+
     public function offsetExists($offset)
     {
         return isset($this->lines[$offset]);
@@ -48,7 +58,7 @@ class File implements \ArrayAccess, \Countable, \IteratorAggregate
 
     public function offsetGet($offset)
     {
-        return $this->lines[$offset];
+        return $this->getLine($offset);
     }
 
     public function offsetSet($offset, $value)
@@ -116,6 +126,11 @@ class File implements \ArrayAccess, \Countable, \IteratorAggregate
     public function getWidth()
     {
         return $this->width;
+    }
+
+    public function getLineSeparator()
+    {
+        return $this->lineSeparator;
     }
 
     protected function validateLine($line)
