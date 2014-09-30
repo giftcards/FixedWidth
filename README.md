@@ -196,21 +196,21 @@ array(2) {
 */
 ```
 
-you can also make it so you dont have to pass the record spec name by adding a record
+you can also make it so you don't have to pass the record spec name by adding a record
 recognizer. this will be discussed in the advanced section.
 
 ##### Line Readers #####
 
 if you want to pull a specific line and just read data for that you can call
-`$reader->getLineReader($index [, $specName]);` if you dont pass the spec name
+`$reader->getLineReader($index [, $specName]);` if you don't pass the spec name
 it will try to recognize the spec.
 
 you can also just iterate over the file reader which will cause it to return an
 iterator that returns line readers for each line in turn.
 
-the line reader follow `ArrayAccess` so you can use fiel names in the record spec
+the line reader follow `ArrayAccess` so you can use field names in the record spec
 to retrieve values. you can also use the `getField` and `getFields` methods to get
-a specific field or specific fields respectively. in all caes all the fields are formatted
+a specific field or all the fields respectively. in all cases all the fields are formatted
 by the file reader's value formatter.
 
 Advanced
