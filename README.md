@@ -13,7 +13,7 @@ Usage
 
 ### Basic ###
 
-for real simple fixed widht file work you can create a new Instance of `File` and add
+for real simple fixed width file work you can create a new Instance of `File` and add
 lines to it setting indexes on ines and adding lines
 
 ```php
@@ -26,15 +26,15 @@ $file = new File(
     'name' /* the name of the file required */,
     20 /* width required */,
     array() /* initial lines if you have any defaults to an empty array */,
-    "\r\n" /* line seperator defaults to \r\n */
+    "\r\n" /* line separator defaults to \r\n */
 );
 
-$line1 = $file->newLine(); //this instanciates a new line and adds it to the file
+$line1 = $file->newLine(); //this instantiates a new line and adds it to the file
                         //then returns it to be edited
 $line1[2] = 'w'; //the line class follows ArrayAccess so can be used as an array to set chars
-$line1['2:3'] = 'w'; //the index can also be a string with 2 numbers seperated by
-                 //a colon to denote a range this is the equivelant range to the above
-                 //index it set the value from and including index a until and exlcuding
+$line1['2:3'] = 'w'; //the index can also be a string with 2 numbers separated by
+                 //a colon to denote a range this is the equivalent range to the above
+                 //index it set the value from and including index a until and excluding
                  //index b
                  //you can also get a value using an index or range.
                  //you can also pass an instance of Slice which is what it is converted
@@ -45,7 +45,7 @@ $line2 = new Line($file->getWidth()); //you can also create a line
 $file[] = $line2; //and add it to the file. it follows ArrayAccess as well
                //you can also use addLine for the same effect
 $file[1] = $line2; //this has the same effect and setLine(1, $line2) can be used as well
-unset($file[0]); //this removes the line at that index and reindexes the lines
+unset($file[0]); //this removes the line at that index and reindex's the lines
               //so $file[0] === $line2
 $line2['0:5'] = 'hello';
 $line2['6:11'] = 'world'; //$line2 now says 'hello world         '
@@ -197,7 +197,16 @@ array(2) {
 ```
 
 you can also make it so you dont have to pass the record spec name by adding a record
-recognizer. this will be discussed in the advanced section
+recognizer. this will be discussed in the advanced section.
+
+##### Line Readers #####
+
+if you want to pull a specific line and just read data for that you can call
+`$reader->getLineReader($index [, $specName]);` if you dont pass the spec name
+it will try to recognize the spec.
+
+you can also just iterate over the file reader which will cause it to return an
+iterator that returns line readers for each line in turn.
 
 Advanced
 --------
