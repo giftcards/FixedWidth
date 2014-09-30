@@ -9,7 +9,7 @@
 namespace Giftcards\FixedWidth\Spec\Recognizer;
 
 
-use Giftcards\FixedWidth\Line;
+use Giftcards\FixedWidth\LineInterface;
 use Giftcards\FixedWidth\Spec\FileSpec;
 use Giftcards\FixedWidth\Spec\SpecNotFoundException;
 
@@ -22,7 +22,7 @@ class SpecFieldRecognizer implements RecordSpecRecognizerInterface
         $this->field = $field;
     }
 
-    public function recognize(Line $line, FileSpec $spec)
+    public function recognize(LineInterface $line, FileSpec $spec)
     {
         $specsMissingField = array();
 

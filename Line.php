@@ -9,7 +9,7 @@
 namespace Giftcards\FixedWidth;
 
 
-class Line implements \ArrayAccess
+class Line implements LineInterface, \ArrayAccess
 {
     protected $data;
 
