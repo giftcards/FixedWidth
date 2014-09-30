@@ -77,7 +77,7 @@ class LineReader implements \ArrayAccess
     public function offsetExists($offset)
     {
         try {
-            $this->getField($offset);
+            $this->spec->getFieldSpec($offset);
             return true;
         } catch(SpecNotFoundException $e) {
             return false;
@@ -90,7 +90,7 @@ class LineReader implements \ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return $this->getFields($offset);
+        return $this->getField($offset);
     }
 
     /**
