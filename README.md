@@ -208,6 +208,11 @@ it will try to recognize the spec.
 you can also just iterate over the file reader which will cause it to return an
 iterator that returns line readers for each line in turn.
 
+the line reader follow `ArrayAccess` so you can use fiel names in the record spec
+to retrieve values. you can also use the `getField` and `getFields` methods to get
+a specific field or specific fields respectively. in all caes all the fields are formatted
+by the file reader's value formatter.
+
 Advanced
 --------
 
