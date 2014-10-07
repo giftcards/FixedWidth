@@ -70,5 +70,48 @@ class FileFactoryTest extends TestCase
             $this->factory->createFromFile($file, "\n")
         );
     }
+
+    public function testCreateFromData()
+    {
+        $file = new \SplFileInfo(__DIR__.'/Fixtures/fixed_width.txt');
+        $lines = explode("\n", file_get_contents($file->getRealPath()));
+
+        $this->assertEquals(
+            new File($file->getFilename(), strlen($lines[0]), $lines),
+            $this->factory->createFromFile($file, "\n")
+        );
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testCreateFromDataWhereDataIsEmpty()
+    {
+        $this->factory->createFromData(
+            file_get_contents(__DIR__.'/Fixtures/empty_fixed_width.txt'),
+            'name'
+        );
+    }
+
+    public function testCreateFromDataWhereDataHasTrailingEndline()
+    {
+        $data = file_get_contents(__DIR__.'/Fixtures/fixed_width_trailing_newline.txt');
+        $lines = explode("\n", $data);
+
+        array_pop($lines);
+
+        $this->assertEquals(
+            new File(
+                'fixed_width_trailing_newline.txt',
+                strlen($lines[0]),
+                $lines
+            ),
+            $this->factory->createFromData(
+                $data,
+                'fixed_width_trailing_newline.txt',
+                "\n"
+            )
+        );
+    }
 }
  

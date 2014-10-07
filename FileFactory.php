@@ -23,11 +23,19 @@ class FileFactory
 
     public function createFromFile(\SplFileInfo $file, $lineSeparator = "\r\n")
     {
-        $lines = explode($lineSeparator, file_get_contents($file->getRealPath()));
+        $data = file_get_contents($file->getRealPath());
+        return $this->createFromData($data, $file->getFilename(), $lineSeparator);
+    }
+
+    public function createFromData($data, $name, $lineSeparator = "\r\n")
+    {
+        $lines = explode($lineSeparator, $data);
 
         if (!($width = strlen($lines[0]))) {
 
-            throw new \InvalidArgumentException('The file you\'ve passed is empty and therefore the width cannot be inferred.');
+            throw new \InvalidArgumentException(
+                'The data you\'ve passed is empty and therefore the width cannot be inferred.'
+            );
         }
 
         //if a file had a trailing line ending remove the last line since it will make the file instance throw an exception
@@ -37,7 +45,7 @@ class FileFactory
         }
 
         return new File(
-            $file->getFilename(),
+            $name,
             $width,
             $lines
         );
