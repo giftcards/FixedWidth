@@ -60,5 +60,21 @@ class FileFactory extends BaseFileFactory
             isset($this->recordSpecRecognizers[$specName]) ? $this->recordSpecRecognizers[$specName] : null
         );
     }
-
+    
+    public function createFromFileAndSpec(\SplFileInfo $file, $specName)
+    {
+        return parent::createFromFile(
+            $file,
+            $this->specLoader->loadSpec($specName)->getLineSeparator()
+        );
+    }
+    
+    public function createFromDataAndSpec($data, $name, $specName)
+    {
+        return parent::createFromData(
+            $data,
+            $name,
+            $this->specLoader->loadSpec($specName)->getLineSeparator()
+        );
+    }
 } 

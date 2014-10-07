@@ -23,8 +23,11 @@ class FileFactory
 
     public function createFromFile(\SplFileInfo $file, $lineSeparator = "\r\n")
     {
-        $data = file_get_contents($file->getRealPath());
-        return $this->createFromData($data, $file->getFilename(), $lineSeparator);
+        return $this->createFromData(
+            file_get_contents($file->getRealPath()),
+            $file->getFilename(),
+            $lineSeparator
+        );
     }
 
     public function createFromData($data, $name, $lineSeparator = "\r\n")

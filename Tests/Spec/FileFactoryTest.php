@@ -47,7 +47,7 @@ class FileFactoryTest extends BaseFileFactoryTest
     {
         $specName = $this->getFaker()->word;
         $name = $this->getFaker()->word;
-        $spec = new FileSpec('', array(), 0, "\r\n");
+        $spec = new FileSpec('', array(), 0, "\n");
         $this->specLoader
             ->shouldReceive('loadSpec')
             ->once()
@@ -60,7 +60,7 @@ class FileFactoryTest extends BaseFileFactoryTest
     public function testCreateReader()
     {
         $specName = $this->getFaker()->word;
-        $spec = new FileSpec('', array(), 0, "\r\n");
+        $spec = new FileSpec('', array(), 0, "\n");
         $file = new File('', 0);
         $this->specLoader
             ->shouldReceive('loadSpec')
@@ -75,6 +75,116 @@ class FileFactoryTest extends BaseFileFactoryTest
             $recognizer
         );
         $this->assertEquals(new FileReader($file, $spec, new SprintfValueFormatter(), $recognizer), $this->factory->createReader($file, $specName));
+    }
+    
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testCreateFromFileAndSpecWhereFileIsEmpty()
+    {
+        $specName = $this->getFaker()->word;
+        $spec = new FileSpec('', array(), 0, "\n");
+        $this->specLoader
+            ->shouldReceive('loadSpec')
+            ->once()
+            ->with($specName)
+            ->andReturn($spec)
+        ;
+        $this->factory->createFromFileAndSpec(
+            new \SplFileInfo(__DIR__.'/../Fixtures/empty_fixed_width.txt'),
+            $specName
+        );
+    }
+
+    public function testCreateFromFileAndSpecWhereFileHasTrailingEndline()
+    {
+        $specName = $this->getFaker()->word;
+        $spec = new FileSpec('', array(), 0, "\n");
+        $this->specLoader
+            ->shouldReceive('loadSpec')
+            ->once()
+            ->with($specName)
+            ->andReturn($spec)
+        ;
+        $file = new \SplFileInfo(__DIR__.'/../Fixtures/fixed_width_trailing_newline.txt');
+        $lines = explode("\n", file_get_contents($file->getRealPath()));
+
+        array_pop($lines);
+
+        $this->assertEquals(
+            new File($file->getFilename(), strlen($lines[0]), $lines),
+            $this->factory->createFromFileAndSpec($file, $specName)
+        );
+    }
+
+    public function testCreateFromDataAndSpec()
+    {
+        $specName = $this->getFaker()->word;
+        $spec = new FileSpec('', array(), 0, "\n");
+        $this->specLoader
+            ->shouldReceive('loadSpec')
+            ->once()
+            ->with($specName)
+            ->andReturn($spec)
+        ;
+        $file = new \SplFileInfo(__DIR__.'/../Fixtures/fixed_width.txt');
+        $lines = explode("\n", file_get_contents($file->getRealPath()));
+
+        $this->assertEquals(
+            new File($file->getFilename(), strlen($lines[0]), $lines),
+            $this->factory->createFromFileAndSpec($file, $specName)
+        );
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testCreateFromDataAndSpecWhereDataIsEmpty()
+    {
+        $specName = $this->getFaker()->word;
+        $name = $this->getFaker()->word;
+        $spec = new FileSpec('', array(), 0, "\n");
+        $this->specLoader
+            ->shouldReceive('loadSpec')
+            ->once()
+            ->with($specName)
+            ->andReturn($spec)
+        ;
+        $this->factory->createFromDataAndSpec(
+            file_get_contents(__DIR__.'/../Fixtures/empty_fixed_width.txt'),
+            $name,
+            $specName
+        );
+    }
+
+    public function testCreateFromDataAndSpecWhereDataHasTrailingEndline()
+    {
+        $specName = $this->getFaker()->word;
+        $name = $this->getFaker()->word;
+        $spec = new FileSpec('', array(), 0, "\n");
+        $this->specLoader
+            ->shouldReceive('loadSpec')
+            ->once()
+            ->with($specName)
+            ->andReturn($spec)
+        ;
+        $data = file_get_contents(__DIR__.'/../Fixtures/fixed_width_trailing_newline.txt');
+        $lines = explode("\n", $data);
+
+        array_pop($lines);
+
+        $this->assertEquals(
+            new File(
+                $name,
+                strlen($lines[0]),
+                $lines
+            ),
+            $this->factory->createFromDataAndSpec(
+                $data,
+                $name,
+                $specName
+            )
+        );
     }
 }
  
