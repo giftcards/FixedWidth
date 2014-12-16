@@ -112,7 +112,7 @@ class FileFactoryTest extends BaseFileFactoryTest
         array_pop($lines);
 
         $this->assertEquals(
-            new File($file->getFilename(), strlen($lines[0]), $lines),
+            new File($file->getFilename(), strlen($lines[0]), $lines, "\n"),
             $this->factory->createFromFileAndSpec($file, $specName)
         );
     }
@@ -177,7 +177,8 @@ class FileFactoryTest extends BaseFileFactoryTest
             new File(
                 $name,
                 strlen($lines[0]),
-                $lines
+                $lines,
+                "\n"
             ),
             $this->factory->createFromDataAndSpec(
                 $data,

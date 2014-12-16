@@ -50,7 +50,8 @@ class FileFactory
         return new File(
             $name,
             $width,
-            $lines
+            $lines,
+            $lineSeparator
         );
     }
 } 
