@@ -131,7 +131,7 @@ class FileFactoryTest extends BaseFileFactoryTest
         $lines = explode("\n", file_get_contents($file->getRealPath()));
 
         $this->assertEquals(
-            new File($file->getFilename(), strlen($lines[0]), $lines),
+            new File($file->getFilename(), strlen($lines[0]), $lines, "\n"),
             $this->factory->createFromFileAndSpec($file, $specName)
         );
     }
