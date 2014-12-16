@@ -78,6 +78,16 @@ class SprintfValueFormatterTest extends TestCase
             'string'
         );
         $this->assertSame('2.3', $this->formatter->formatFromFile($spec, ' 2.3'));
+        $spec = new FieldSpec(
+            $this->getFaker()->word,
+            new Slice(0, 4),
+            null,
+            's',
+            ' ',
+            FieldSpec::PADDING_DIRECTION_RIGHT,
+            'string'
+        );
+        $this->assertSame('2.3', $this->formatter->formatFromFile($spec, '2.3 '));
     }
 }
  
