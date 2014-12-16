@@ -65,5 +65,19 @@ class SprintfValueFormatterTest extends TestCase
         );
         $this->assertSame(2.3, $this->formatter->formatFromFile($spec, '02.3'));
     }
+
+    public function testFormatFromFileTrims()
+    {
+        $spec = new FieldSpec(
+            $this->getFaker()->word,
+            new Slice(0, 4),
+            null,
+            's',
+            ' ',
+            FieldSpec::PADDING_DIRECTION_LEFT,
+            'string'
+        );
+        $this->assertSame('2.3', $this->formatter->formatFromFile($spec, ' 2.3'));
+    }
 }
  
