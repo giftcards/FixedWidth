@@ -11,7 +11,7 @@
         "php": ">=5.3"
     },
     "require-dev": {
-        "mockery/mockery": "@dev",
+        "mockery/mockery": ">=0.8@dev",
         "fzaninotto/faker" : "~1.2",
         "symfony/yaml": "~2.0",
         "symfony/config": "~2.0",
