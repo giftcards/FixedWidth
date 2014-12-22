@@ -9,7 +9,7 @@
 namespace Giftcards\FixedWidth;
 
 
-class File implements \IteratorAggregate, \ArrayAccess, FileInterface
+class File extends AbstractFile
 {
     protected $name;
     protected $width;
@@ -26,11 +26,6 @@ class File implements \IteratorAggregate, \ArrayAccess, FileInterface
         $this->width = (int)$width;
         array_walk($lines, array($this, 'addLine'));
         $this->lineSeparator = $lineSeparator;
-    }
-
-    public function __toString()
-    {
-        return implode($this->lineSeparator, $this->lines);
     }
 
     /**
@@ -56,27 +51,6 @@ class File implements \IteratorAggregate, \ArrayAccess, FileInterface
         return isset($this->lines[$offset]);
     }
 
-    public function offsetGet($offset)
-    {
-        return $this->getLine($offset);
-    }
-
-    public function offsetSet($offset, $value)
-    {
-        if (is_null($offset)) {
-
-            $this->addLine($value);
-            return;
-        }
-
-        $this->setLine($offset, $value);
-    }
-
-    public function offsetUnset($offset)
-    {
-        $this->removeLine($offset);
-    }
-
     public function count()
     {
         return count($this->lines);
@@ -90,11 +64,6 @@ class File implements \IteratorAggregate, \ArrayAccess, FileInterface
         return $this->name;
     }
 
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->getLines());
-    }
-
     public function addLine($line)
     {
         $this->lines[] = $this->validateLine($line);
@@ -103,6 +72,11 @@ class File implements \IteratorAggregate, \ArrayAccess, FileInterface
 
     public function setLine($index, $line)
     {
+        if ($index >= $this->count()) {
+
+            throw new \OutOfBoundsException('setLine can only be used to update lines. To add a new line use addLine.');
+        }
+
         $this->lines[$index] = $this->validateLine($line);
         return $this;
     }
@@ -112,12 +86,6 @@ class File implements \IteratorAggregate, \ArrayAccess, FileInterface
         unset($this->lines[$index]);
         $this->lines = array_values($this->lines);
         return $this;
-    }
-
-    public function newLine()
-    {
-        $this->lines[] = $line = new Line($this->width);
-        return $line;
     }
 
     /**
@@ -131,24 +99,5 @@ class File implements \IteratorAggregate, \ArrayAccess, FileInterface
     public function getLineSeparator()
     {
         return $this->lineSeparator;
-    }
-
-    protected function validateLine($line)
-    {
-        if (!$line instanceof Line) {
-
-            $line = new Line((string)$line);
-        }
-
-        if ($line->getLength() != $this->width) {
-
-            throw new \InvalidArgumentException(sprintf(
-                'All lines in a batch file must be %d chars wide this line is %d chars wide.',
-                $this->width,
-                strlen($line)
-            ));
-        }
-
-        return $line;
     }
 }

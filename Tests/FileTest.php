@@ -108,7 +108,16 @@ class FileTest extends TestCase
      */
     public function testSetLineWhereLengthIsWrong()
     {
-        $this->file->setLine(4, new Line($this->width - 1));
+        $this->file->setLine(1, new Line($this->width - 1));
+    }
+
+
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testSetLineWhereOutOfBounds()
+    {
+        $this->file->setLine(4, new Line($this->width));
     }
 
     /**

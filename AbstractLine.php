@@ -89,6 +89,8 @@ abstract class AbstractLine implements LineInterface, \ArrayAccess
         }
     }
 
+    /** @codeCoverageIgnore */
     abstract protected function loadSlice(Slice $slice);
+    /** @codeCoverageIgnore */
     abstract protected function setSlice(Slice $slice, $value);
 }

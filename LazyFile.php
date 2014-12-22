@@ -8,7 +8,7 @@
 namespace Giftcards\FixedWidth;
 
 
-class LazyFile implements \IteratorAggregate, \ArrayAccess, FileInterface
+class LazyFile extends AbstractFile
 {
     protected $fileObject;
     protected $lineSeparatorLength;
@@ -42,16 +42,13 @@ class LazyFile implements \IteratorAggregate, \ArrayAccess, FileInterface
         $this->hasTrailingLineSeparator = $lineRemainder == 0;
     }
 
-    public function __toString()
-    {
-        return file_get_contents($this->fileObject->getRealPath());
-    }
-
     public function getLines()
     {
         return array_map(
-            function($index){return $this->getLine($index);}, 
-            //array_filter is to take out the empty trailing line left behind by the trailing line separator
+            function($index)
+            {
+                return $this->getLine($index);
+            }, 
             range(0, $this->count() - 1)
         );
     }
@@ -63,38 +60,7 @@ class LazyFile implements \IteratorAggregate, \ArrayAccess, FileInterface
             throw new \OutOfBoundsException('The index is outside of the available indexes of lines.');
         }
         
-        $linePosition = $this->getLinePosition($index);
-
-        $this->fileObject->fseek(
-            $linePosition,
-            SEEK_SET
-        );
-        
-        if ($this->fileObject->ftell() == 0) {
-            
-            $preLineEnding = $this->lineSeparator;
-        } else {
-
-            $this->fileObject->fseek(-$this->lineSeparatorLength, SEEK_CUR);
-            $preLineEnding = $this->readFromFile($this->lineSeparatorLength);
-        }
-
-        $this->fileObject->fseek($linePosition + $this->width);
-
-        try {
-            
-            $postLineEnding = $this->readFromFile($this->lineSeparatorLength);
-        } catch (\OverflowException $e) {
-
-            $postLineEnding = $this->lineSeparator;
-        }
-
-        if (($preLineEnding != $this->lineSeparator) || $postLineEnding != $this->lineSeparator) {
-            
-            throw new \RuntimeException(sprintf('the line is not bound by line endings.'));
-        }
-        
-        return new LazyLine($this->fileObject, $linePosition, $this->width);
+        return new LazyLine($this->fileObject, $this->getLinePosition($index), $this->width);
     }
 
     public function count()
@@ -133,6 +99,11 @@ class LazyFile implements \IteratorAggregate, \ArrayAccess, FileInterface
 
     public function setLine($index, $line)
     {
+        if ($index >= $this->count()) {
+            
+            throw new \OutOfBoundsException('setLine can only be used to update lines. To add a new line use addLine.');
+        }
+        
         $line = $this->validateLine($line);
         $this->fileObject->fseek($this->getLinePosition($index), SEEK_SET);
         $this->fileObject->fwrite((string)$line);
@@ -150,29 +121,9 @@ class LazyFile implements \IteratorAggregate, \ArrayAccess, FileInterface
         return $this->realLineWidth * $lineIndex;
     }
 
-    protected function readFromFile($length)
-    {
-        $data = '';
-        
-        for ($i = 0; $i < $length; $i++) {
-
-            $char = $this->fileObject->fgetc();
-            
-            if ($this->fileObject->eof()) {
-
-                throw new \OverflowException('overflowed the file');
-            }
-
-            $data .= $char;
-        }
-        
-        return $data;
-    }
-
     public function offsetExists($offset)
     {
-        $fileData = $this->fileObject->fstat();
-        return $this->getLinePosition($offset) > $fileData['size'];
+        return $this->getLinePosition($offset) > $this->getSize();
     }
 
     public function offsetGet($offset)
@@ -214,7 +165,6 @@ class LazyFile implements \IteratorAggregate, \ArrayAccess, FileInterface
 
     public function newLine()
     {
-        $this->fileObject->fseek(0, SEEK_END);
         $this->addLine(str_repeat(' ', $this->width));
         return $this->getLine($this->count() - 1);
     }
