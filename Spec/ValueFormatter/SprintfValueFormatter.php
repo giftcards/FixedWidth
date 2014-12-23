@@ -47,6 +47,14 @@ class SprintfValueFormatter implements ValueFormatterInterface
 
     public function formatFromFile(FieldSpec $spec, $value)
     {
+        if (($paddingChar = $spec->getPaddingChar()) !== null) {
+            if ($spec->getPaddingDirection() == FieldSpec::PADDING_DIRECTION_LEFT) {
+                $value = ltrim($value, $paddingChar);
+            } else {
+                $value = rtrim($value, $paddingChar);
+            }
+        }
+        
         $type = 'string';
 
         if (isset($this->typeSpecifierMap[substr($spec->getFormatSpecifier(), -1)])) {

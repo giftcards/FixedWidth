@@ -9,7 +9,7 @@
 namespace Giftcards\FixedWidth\Spec;
 
 
-use Giftcards\FixedWidth\File;
+use Giftcards\FixedWidth\FileInterface;
 use Giftcards\FixedWidth\FileBuilder;
 use Giftcards\FixedWidth\FileFactory as BaseFileFactory;
 use Giftcards\FixedWidth\FileReader;
@@ -56,7 +56,7 @@ class FileFactory extends BaseFileFactory
         return new FileBuilder($nameOrFile, $this->specLoader->loadSpec($specName), $this->formatter);
     }
 
-    public function createReader(File $file, $specName)
+    public function createReader(FileInterface $file, $specName)
     {
         return new FileReader(
             $file,
