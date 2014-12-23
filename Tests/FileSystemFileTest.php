@@ -11,18 +11,18 @@ namespace Giftcards\FixedWidth\Tests;
 
 use Giftcards\FixedWidth\File;
 use Giftcards\FixedWidth\FileIterator;
-use Giftcards\FixedWidth\LazyFile;
-use Giftcards\FixedWidth\LazyLine;
+use Giftcards\FixedWidth\FileSystemFile;
+use Giftcards\FixedWidth\FileSystemLine;
 use Giftcards\FixedWidth\Line;
 
-class LazyFileTest extends TestCase
+class FileSystemFileTest extends TestCase
 {
-    /** @var  LazyFile */
+    /** @var  FileSystemFile */
     protected $file;
     protected $width;
-    /** @var  LazyLine */
+    /** @var  FileSystemLine */
     protected $line1;
-    /** @var  LazyLine */
+    /** @var  FileSystemLine */
     protected $line2;
     protected $name;
 
@@ -32,7 +32,7 @@ class LazyFileTest extends TestCase
         $this->line1 = str_repeat('w', $this->width);
         $this->line2 = new Line($this->width);
         $this->name = 'lazy_file_'.$this->getFaker()->word.'.txt';
-        $this->file = new LazyFile(
+        $this->file = new FileSystemFile(
             $this->width,
             new \SplFileObject(__DIR__.'/Fixtures/'.$this->name, 'w+')
         );
@@ -45,8 +45,8 @@ class LazyFileTest extends TestCase
         $this->assertEquals("\r\n", $this->file->getLineSeparator());
         $this->assertEquals(
             array(
-                new LazyLine($this->file->getFileObject(), 0, $this->width),
-                new LazyLine($this->file->getFileObject(), $this->width + 2, $this->width),
+                new FileSystemLine($this->file->getFileObject(), 0, $this->width),
+                new FileSystemLine($this->file->getFileObject(), $this->width + 2, $this->width),
             ),
             $this->file->getLines()
         );
@@ -128,16 +128,17 @@ class LazyFileTest extends TestCase
      */
     public function testConstructionWithUnevenFile()
     {
-        new LazyFile(10, new \SplFileObject(__DIR__.'/Fixtures/fixed_width_uneven.txt'), "\n");
+        new FileSystemFile(10, new \SplFileObject(__DIR__.'/Fixtures/fixed_width_uneven.txt'), "\n");
     }
 
     public function testFileWithoutTrailingLineEnding()
     {
         $fileObject = new \SplFileObject(__DIR__.'/Fixtures/'.$this->getFaker()->word.'.txt', 'w+');
         $fileObject->fwrite('line');
-        $file = new LazyFile(4, $fileObject, "\n");
+        $file = new FileSystemFile(4, $fileObject, "\n");
         $file->addLine('line');
         $this->assertEquals("line\nline", $file);
+        $this->assertEquals(file_get_contents($fileObject->getRealPath()), $file);
         unlink($fileObject->getRealPath());
     }
 

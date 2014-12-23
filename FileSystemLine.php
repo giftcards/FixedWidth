@@ -9,7 +9,7 @@
 namespace Giftcards\FixedWidth;
 
 
-class LazyLine extends AbstractLine
+class FileSystemLine extends AbstractLine
 {
     protected $file;
     protected $startPosition;
@@ -20,6 +20,17 @@ class LazyLine extends AbstractLine
         $this->fileObject = $fileObject;
         $this->startPosition = $startPosition;
         $this->length = $length;
+    }
+
+    public function __toString()
+    {
+        try {
+
+            return parent::__toString();
+        } catch (\OverflowException $e) {
+
+            return '';
+        }
     }
 
     public function getLength()

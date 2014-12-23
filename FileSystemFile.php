@@ -8,7 +8,7 @@
 namespace Giftcards\FixedWidth;
 
 
-class LazyFile extends AbstractFile
+class FileSystemFile extends AbstractFile
 {
     protected $fileObject;
     protected $lineSeparatorLength;
@@ -73,7 +73,7 @@ class LazyFile extends AbstractFile
             throw new \OutOfBoundsException('The index is outside of the available indexes of lines.');
         }
         
-        return new LazyLine($this->fileObject, $this->getLinePosition($index), $this->width);
+        return new FileSystemLine($this->fileObject, $this->getLinePosition($index), $this->width);
     }
 
     public function count()
