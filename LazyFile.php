@@ -42,12 +42,25 @@ class LazyFile extends AbstractFile
         $this->hasTrailingLineSeparator = $lineRemainder == 0;
     }
 
+    public function __toString()
+    {
+        $string = parent::__toString();
+        
+        if ($this->hasTrailingLineSeparator) {
+            $string .= $this->lineSeparator;
+        }
+        
+        return $string;
+    }
+
     public function getLines()
     {
+        $file = $this;
+        
         return array_map(
-            function($index)
+            function($index) use ($file)
             {
-                return $this->getLine($index);
+                return $file->getLine($index);
             }, 
             range(0, $this->count() - 1)
         );
@@ -82,6 +95,7 @@ class LazyFile extends AbstractFile
     {
         $line = $this->validateLine($line);
         $this->fileObject->fseek(0, SEEK_END);
+        
         if (!$this->hasTrailingLineSeparator) {
             
             $this->fileObject->fwrite($this->lineSeparator);
@@ -111,7 +125,7 @@ class LazyFile extends AbstractFile
         return $this;
     }
 
-    public function removeLine($index)
+   public function removeLine($index)
     {
         throw new \BadMethodCallException('This method is not yet implemented.');
     }
@@ -123,7 +137,7 @@ class LazyFile extends AbstractFile
 
     public function offsetExists($offset)
     {
-        return $this->getLinePosition($offset) > $this->getSize();
+        return $offset < $this->count();
     }
 
     public function offsetGet($offset)
@@ -163,10 +177,9 @@ class LazyFile extends AbstractFile
         return $this->lineSeparator;
     }
 
-    public function newLine()
+    public function getFileObject()
     {
-        $this->addLine(str_repeat(' ', $this->width));
-        return $this->getLine($this->count() - 1);
+        return $this->fileObject;
     }
 
     protected function validateLine($line)

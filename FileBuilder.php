@@ -14,19 +14,31 @@ use Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface;
 
 class FileBuilder
 {
+    /** @var FileInterface  */
     protected $file;
     protected $spec;
     protected $formatter;
 
-    public function __construct($name, FileSpec $spec, ValueFormatterInterface $formatter)
+    /**
+     * @param FileInterface|string $nameOrFile
+     * @param FileSpec $spec
+     * @param ValueFormatterInterface $formatter
+     */
+    public function __construct($nameOrFile, FileSpec $spec, ValueFormatterInterface $formatter)
     {
         $this->spec = $spec;
-        $this->file = new File(
-            $name,
-            $spec->getWidth(),
-            array(),
-            $this->spec->getLineSeparator()
-        );
+        
+        if (!$nameOrFile instanceof FileInterface) {
+            
+            $nameOrFile = new File(
+                $nameOrFile,
+                $spec->getWidth(),
+                array(),
+                $this->spec->getLineSeparator()
+            );
+        }
+        
+        $this->file = $nameOrFile;
         $this->formatter = $formatter;
     }
 
@@ -38,7 +50,7 @@ class FileBuilder
     public function addRecord($recordSpecName, array $data)
     {
         $recordSpec = $this->spec->getRecordSpec($recordSpecName);
-        $line = $this->file->newLine();
+        $line = new Line($this->file->getWidth());
 
         foreach ($recordSpec->getFieldSpecs() as $name => $fieldSpec) {
 
@@ -54,6 +66,8 @@ class FileBuilder
                 $value
             );
         }
+        
+        $this->file->addLine($line);
 
         return $this;
     }

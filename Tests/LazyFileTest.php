@@ -11,16 +11,18 @@ namespace Giftcards\FixedWidth\Tests;
 
 use Giftcards\FixedWidth\File;
 use Giftcards\FixedWidth\FileIterator;
+use Giftcards\FixedWidth\LazyFile;
+use Giftcards\FixedWidth\LazyLine;
 use Giftcards\FixedWidth\Line;
 
-class FileTest extends TestCase
+class LazyFileTest extends TestCase
 {
-    /** @var  File */
+    /** @var  LazyFile */
     protected $file;
     protected $width;
-    /** @var  Line */
+    /** @var  LazyLine */
     protected $line1;
-    /** @var  Line */
+    /** @var  LazyLine */
     protected $line2;
     protected $name;
 
@@ -29,12 +31,12 @@ class FileTest extends TestCase
         $this->width = $this->getFaker()->numberBetween(10, 15);
         $this->line1 = str_repeat('w', $this->width);
         $this->line2 = new Line($this->width);
-        $this->name = $this->getFaker()->word;
-        $this->file = new File(
-            $this->name,
+        $this->name = 'lazy_file_'.$this->getFaker()->word.'.txt';
+        $this->file = new LazyFile(
             $this->width,
-            array($this->line1, $this->line2)
+            new \SplFileObject(__DIR__.'/Fixtures/'.$this->name, 'w+')
         );
+        $this->file->addLine($this->line1)->addLine($this->line2);
     }
 
     public function testGettersSetters()
@@ -42,16 +44,19 @@ class FileTest extends TestCase
         $this->assertEquals($this->width, $this->file->getWidth());
         $this->assertEquals("\r\n", $this->file->getLineSeparator());
         $this->assertEquals(
-            array(new Line($this->line1), $this->line2),
+            array(
+                new LazyLine($this->file->getFileObject(), 0, $this->width),
+                new LazyLine($this->file->getFileObject(), $this->width + 2, $this->width),
+            ),
             $this->file->getLines()
         );
-        $this->assertSame($this->line2, $this->file->getLine(1));
-        $this->assertEquals($this->line1."\r\n".$this->line2, $this->file);
+
+        $this->assertEquals($this->line1."\r\n".$this->line2."\r\n", (string)$this->file);
         $this->assertTrue(isset($this->file[0]));
         $this->assertTrue(isset($this->file[1]));
         $this->assertFalse(isset($this->file[2]));
         $this->assertEquals($this->line1, $this->file[0]);
-        $this->assertSame($this->line2, $this->file[1]);
+        $this->assertEquals((string)$this->line2, $this->file[1]);
         $this->assertCount(2, $this->file);
         $line3 = new Line($this->width);
         $line4 = str_repeat('x', $this->width);
@@ -60,33 +65,26 @@ class FileTest extends TestCase
         $this->file[] = $line4;
         $this->file[1] = $line5;
         $this->assertEquals(array(
-            $this->line1,
-            $line5,
-            $line3,
-            $line4
-        ), $this->file->getLines());
-        $this->assertSame($this->file, $this->file->removeLine(2));
-        $this->assertEquals(array(
-            new Line($this->line1),
-            $line5,
-            new Line($line4)
-        ), $this->file->getLines());
-        unset($this->file[2]);
-        $this->assertEquals(array(
-            new Line($this->line1),
-            $line5
+            (string)$this->line1,
+            (string)$line5,
+            (string)$line3,
+            (string)$line4
         ), $this->file->getLines());
         $this->assertSame($this->file, $this->file->addLine($this->line2));
         $this->assertEquals(array(
-            new Line($this->line1),
-            $line5,
-            $this->line2
+            (string)$this->line1,
+            (string)$line5,
+            (string)$line3,
+            (string)$line4,
+            (string)$this->line2
         ), $this->file->getLines());
         $this->assertSame($this->file, $this->file->setLine(0, $line4));
         $this->assertEquals(array(
-            $line4,
-            $line5,
-            $this->line2
+            (string)$line4,
+            (string)$line5,
+            (string)$line3,
+            (string)$line4,
+            (string)$this->line2
         ), $this->file->getLines());
         $this->assertEquals($this->name, $this->file->getName());
         $this->assertEquals(new FileIterator($this->file), $this->file->getIterator());
@@ -123,6 +121,45 @@ class FileTest extends TestCase
     public function testGetLineWhereOutOfBounds()
     {
         $this->file->getLine(5);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testConstructionWithUnevenFile()
+    {
+        new LazyFile(10, new \SplFileObject(__DIR__.'/Fixtures/fixed_width_uneven.txt'), "\n");
+    }
+
+    public function testFileWithoutTrailingLineEnding()
+    {
+        $fileObject = new \SplFileObject(__DIR__.'/Fixtures/'.$this->getFaker()->word.'.txt', 'w+');
+        $fileObject->fwrite('line');
+        $file = new LazyFile(4, $fileObject, "\n");
+        $file->addLine('line');
+        $this->assertEquals("line\nline", $file);
+        unlink($fileObject->getRealPath());
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testRemoveLine()
+    {
+        $this->file->removeLine(0);
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testUnsetLine()
+    {
+        unset($this->file[0]);
+    }
+
+    public function tearDown()
+    {
+        unlink(__DIR__.'/Fixtures/'.$this->name);
     }
 }
  
