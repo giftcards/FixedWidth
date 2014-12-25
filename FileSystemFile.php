@@ -46,7 +46,10 @@ class FileSystemFile extends AbstractFile
      * be CAREFUL using this function since if the file is large
      * loading he whole file into memory could immediately cause
      * you to run out of memory. This has been made available to the developer
-     * if they want to use it but it seems it would usually not be a good idea
+     * if they want to use it but it seems it would usually not be a good idea.
+     * If you want to go over each line and do something then using iteration
+     * would probably be better since only one or 2 lines are usually in memory
+     * at a time
      *
      * @return string
      */
@@ -65,7 +68,10 @@ class FileSystemFile extends AbstractFile
      * be CAREFUL using this function since if the file is large
      * loading he whole file into memory could immediately cause
      * you to run out of memory. This has been made available to the developer
-     * if they want to use it but it seems it would usually not be a good idea
+     * if they want to use it but it seems it would usually not be a good idea.
+     * If you want to go over each line and do something then using iteration
+     * would probably be better since only one or 2 lines are usually in memory
+     * at a time
      * 
      * @return array
      */
