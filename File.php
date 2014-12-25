@@ -11,6 +11,6 @@ namespace Giftcards\FixedWidth;
 /**
  * @deprecated use InMemoryFile instead
  */
-class File extends InMemoryFile
+abstract class File extends AbstractFile
 {
 }
