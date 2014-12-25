@@ -9,7 +9,7 @@
 namespace Giftcards\FixedWidth;
 
 
-class InMemoryFile extends File
+class InMemoryFile extends AbstractFile
 {
     protected $name;
     protected $width;

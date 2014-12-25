@@ -11,6 +11,4 @@ namespace Giftcards\FixedWidth;
 /**
  * @deprecated use InMemoryFile instead
  */
-abstract class File extends AbstractFile
-{
-}
+class_alias('Giftcards\FixedWidth\InMemoryFile', 'Giftcards\FixedWidth\File');
