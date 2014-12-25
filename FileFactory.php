@@ -9,16 +9,11 @@
 namespace Giftcards\FixedWidth;
 
 
-use Giftcards\FixedWidth\Spec\Loader\SpecLoaderInterface;
-use Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface;
-use Giftcards\FixedWidth\Spec\ValueFormatter\SprintfValueFormatter;
-use Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface;
-
 class FileFactory
 {
     public function create($name, $width, $lineSeparator = "\r\n")
     {
-        return new File($name, $width, array(), $lineSeparator);
+        return new InMemoryFile($name, $width, array(), $lineSeparator);
     }
 
     public function createFromFile(\SplFileInfo $file, $lineSeparator = "\r\n")
@@ -47,7 +42,7 @@ class FileFactory
             array_pop($lines);
         }
 
-        return new File(
+        return new InMemoryFile(
             $name,
             $width,
             $lines,

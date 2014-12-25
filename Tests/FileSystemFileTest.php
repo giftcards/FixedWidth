@@ -9,7 +9,6 @@
 namespace Giftcards\FixedWidth\Tests;
 
 
-use Giftcards\FixedWidth\File;
 use Giftcards\FixedWidth\FileIterator;
 use Giftcards\FixedWidth\FileSystemFile;
 use Giftcards\FixedWidth\FileSystemLine;

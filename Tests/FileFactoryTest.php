@@ -9,12 +9,8 @@
 namespace Giftcards\FixedWidth\Tests;
 
 
-use Giftcards\FixedWidth\File;
-use Giftcards\FixedWidth\FileBuilder;
+use Giftcards\FixedWidth\InMemoryFile;
 use Giftcards\FixedWidth\FileFactory;
-use Giftcards\FixedWidth\FileReader;
-use Giftcards\FixedWidth\Spec\FileSpec;
-use Giftcards\FixedWidth\Spec\ValueFormatter\SprintfValueFormatter;
 use Mockery\MockInterface;
 
 class FileFactoryTest extends TestCase
@@ -33,7 +29,7 @@ class FileFactoryTest extends TestCase
     {
         $width = $this->getFaker()->numberBetween(5, 15);
         $name = $this->getFaker()->word;
-        $this->assertEquals(new File($name, $width), $this->factory->create(
+        $this->assertEquals(new InMemoryFile($name, $width), $this->factory->create(
             $name,
             $width
         ));
@@ -45,7 +41,7 @@ class FileFactoryTest extends TestCase
         $lines = explode("\n", file_get_contents($file->getRealPath()));
 
         $this->assertEquals(
-            new File($file->getFilename(), strlen($lines[0]), $lines, "\n"),
+            new InMemoryFile($file->getFilename(), strlen($lines[0]), $lines, "\n"),
             $this->factory->createFromFile($file, "\n")
         );
     }
@@ -66,7 +62,7 @@ class FileFactoryTest extends TestCase
         array_pop($lines);
 
         $this->assertEquals(
-            new File($file->getFilename(), strlen($lines[0]), $lines, "\n"),
+            new InMemoryFile($file->getFilename(), strlen($lines[0]), $lines, "\n"),
             $this->factory->createFromFile($file, "\n")
         );
     }
@@ -77,7 +73,7 @@ class FileFactoryTest extends TestCase
         $lines = explode("\n", file_get_contents($file->getRealPath()));
 
         $this->assertEquals(
-            new File($file->getFilename(), strlen($lines[0]), $lines, "\n"),
+            new InMemoryFile($file->getFilename(), strlen($lines[0]), $lines, "\n"),
             $this->factory->createFromFile($file, "\n")
         );
     }
@@ -101,7 +97,7 @@ class FileFactoryTest extends TestCase
         array_pop($lines);
 
         $this->assertEquals(
-            new File(
+            new InMemoryFile(
                 'fixed_width_trailing_newline.txt',
                 strlen($lines[0]),
                 $lines,

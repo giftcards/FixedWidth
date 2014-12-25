@@ -9,13 +9,13 @@
 namespace Giftcards\FixedWidth\Tests;
 
 
-use Giftcards\FixedWidth\File;
+use Giftcards\FixedWidth\InMemoryFile;
 use Giftcards\FixedWidth\FileIterator;
 use Giftcards\FixedWidth\Line;
 
 class FileTest extends TestCase
 {
-    /** @var  File */
+    /** @var  InMemoryFile */
     protected $file;
     protected $width;
     /** @var  Line */
@@ -30,7 +30,7 @@ class FileTest extends TestCase
         $this->line1 = str_repeat('w', $this->width);
         $this->line2 = new Line($this->width);
         $this->name = $this->getFaker()->word;
-        $this->file = new File(
+        $this->file = new InMemoryFile(
             $this->name,
             $this->width,
             array($this->line1, $this->line2)

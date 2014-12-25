@@ -9,7 +9,7 @@
 namespace Giftcards\FixedWidth\Tests\Spec;
 
 
-use Giftcards\FixedWidth\File;
+use Giftcards\FixedWidth\InMemoryFile;
 use Giftcards\FixedWidth\FileBuilder;
 use Giftcards\FixedWidth\Spec\FileFactory;
 use Giftcards\FixedWidth\FileReader;
@@ -61,7 +61,7 @@ class FileFactoryTest extends BaseFileFactoryTest
     {
         $specName = $this->getFaker()->word;
         $spec = new FileSpec('', array(), 0, "\n");
-        $file = new File('', 0);
+        $file = new InMemoryFile('', 0);
         $this->specLoader
             ->shouldReceive('loadSpec')
             ->twice()
@@ -112,7 +112,7 @@ class FileFactoryTest extends BaseFileFactoryTest
         array_pop($lines);
 
         $this->assertEquals(
-            new File($file->getFilename(), strlen($lines[0]), $lines, "\n"),
+            new InMemoryFile($file->getFilename(), strlen($lines[0]), $lines, "\n"),
             $this->factory->createFromFileAndSpec($file, $specName)
         );
     }
@@ -131,7 +131,7 @@ class FileFactoryTest extends BaseFileFactoryTest
         $lines = explode("\n", file_get_contents($file->getRealPath()));
 
         $this->assertEquals(
-            new File($file->getFilename(), strlen($lines[0]), $lines, "\n"),
+            new InMemoryFile($file->getFilename(), strlen($lines[0]), $lines, "\n"),
             $this->factory->createFromFileAndSpec($file, $specName)
         );
     }
@@ -174,7 +174,7 @@ class FileFactoryTest extends BaseFileFactoryTest
         array_pop($lines);
 
         $this->assertEquals(
-            new File(
+            new InMemoryFile(
                 $name,
                 strlen($lines[0]),
                 $lines,

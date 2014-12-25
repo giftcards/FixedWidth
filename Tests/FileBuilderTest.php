@@ -9,7 +9,7 @@
 namespace Giftcards\FixedWidth\Tests;
 
 
-use Giftcards\FixedWidth\File;
+use Giftcards\FixedWidth\InMemoryFile;
 use Giftcards\FixedWidth\FileBuilder;
 use Giftcards\FixedWidth\Line;
 use Giftcards\FixedWidth\Spec\FileSpec;
@@ -103,7 +103,7 @@ class FileBuilderTest extends TestCase
         $line2['34:39'] = 'x3.00';
         $line2['40:42'] = 'hw';
         $line3['34:56'] = '                 12345';
-        $file = new File($this->fileName, $this->spec->getWidth(), array(
+        $file = new InMemoryFile($this->fileName, $this->spec->getWidth(), array(
             $line1,
             $line2,
             $line3

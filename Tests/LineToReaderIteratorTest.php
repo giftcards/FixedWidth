@@ -9,7 +9,7 @@
 namespace Giftcards\FixedWidth\Tests;
 
 
-use Giftcards\FixedWidth\File;
+use Giftcards\FixedWidth\InMemoryFile;
 use Giftcards\FixedWidth\Line;
 use Giftcards\FixedWidth\LineReader;
 use Giftcards\FixedWidth\LineToReaderIterator;
@@ -20,7 +20,7 @@ use Symfony\Component\Config\FileLocator;
 
 class LineToReaderIteratorTest extends TestCase
 {
-    /** @var  File */
+    /** @var  InMemoryFile */
     protected $file;
     /** @var  FileSpec */
     protected $spec;
@@ -35,7 +35,7 @@ class LineToReaderIteratorTest extends TestCase
         $this->spec = $loader->loadSpec('spec1');
         $this->formatter = \Mockery::mock('Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface');
         $this->recognizer = \Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface');
-        $this->file = new File($this->getFaker()->word, $this->spec->getWidth());
+        $this->file = new InMemoryFile($this->getFaker()->word, $this->spec->getWidth());
 
     }
 

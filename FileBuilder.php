@@ -30,7 +30,7 @@ class FileBuilder
         
         if (!$nameOrFile instanceof FileInterface) {
             
-            $nameOrFile = new File(
+            $nameOrFile = new InMemoryFile(
                 $nameOrFile,
                 $spec->getWidth(),
                 array(),
