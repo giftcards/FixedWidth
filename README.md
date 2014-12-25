@@ -256,3 +256,22 @@ use Giftcards\FixedWidth\Spec\FileFactory;
 
 $factory = new FileFactory($specLoader, $customValueFormatter);
 ```
+
+###Keeping memory usage low with large files###
+in cases where you dont want to have the entire file in memory while working with it
+you cna use the `Giftcards\FixedWidth\FileSystemFile` class. It works directly with
+the supplied `SplFileObject` when possible instead of holding the data in memory.
+this class can be used with the spec, file builder and file reader classes the same as the 
+`Giftcards\FixedWidth\File` class.
+
+example
+
+```php
+
+use Giftcards\FixedWidth\FileSystemFile;
+
+$fileObject = new \SplFileObject('filename.txt', 'w+');
+$file = new FileSystemFile($fileObject, 20, "\r\n");
+
+$builder = $fileFactory->createBuilder($file, 'spec_name');
+$reader = $fileFactory->createReader($file, 'spec_name');
