@@ -42,6 +42,14 @@ class FileSystemFile extends AbstractFile
         $this->hasTrailingLineSeparator = $lineRemainder == 0;
     }
 
+    /**
+     * be CAREFUL using this function since if the file is large
+     * loading he whole file into memory could immediately cause
+     * you to run out of memory. This has been made available to the developer
+     * if they want to use it but it seems it would usually not be a good idea
+     *
+     * @return string
+     */
     public function __toString()
     {
         $string = parent::__toString();
@@ -53,17 +61,17 @@ class FileSystemFile extends AbstractFile
         return $string;
     }
 
+    /**
+     * be CAREFUL using this function since if the file is large
+     * loading he whole file into memory could immediately cause
+     * you to run out of memory. This has been made available to the developer
+     * if they want to use it but it seems it would usually not be a good idea
+     * 
+     * @return array
+     */
     public function getLines()
     {
-        $file = $this;
-        
-        return array_map(
-            function($index) use ($file)
-            {
-                return $file->getLine($index);
-            }, 
-            range(0, $this->count() - 1)
-        );
+        return iterator_to_array($this);
     }
 
     public function getLine($index)
