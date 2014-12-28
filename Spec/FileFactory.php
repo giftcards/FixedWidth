@@ -46,9 +46,14 @@ class FileFactory extends BaseFileFactory
         return $this->recordSpecRecognizers;
     }
 
-    public function createBuilder($name, $specName)
+    /**
+     * @param string|FileInterface $nameOrFile
+     * @param $specName
+     * @return FileBuilder
+     */
+    public function createBuilder($nameOrFile, $specName)
     {
-        return new FileBuilder($name, $this->specLoader->loadSpec($specName), $this->formatter);
+        return new FileBuilder($nameOrFile, $this->specLoader->loadSpec($specName), $this->formatter);
     }
 
     public function createReader(FileInterface $file, $specName)

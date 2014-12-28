@@ -9,7 +9,7 @@
 namespace Giftcards\FixedWidth\Tests;
 
 
-use Giftcards\FixedWidth\File;
+use Giftcards\FixedWidth\InMemoryFile;
 use Giftcards\FixedWidth\FileReader;
 use Giftcards\FixedWidth\Line;
 use Giftcards\FixedWidth\LineReader;
@@ -36,7 +36,7 @@ class FileReaderTest extends TestCase
         $loader = new YamlSpecLoader(new FileLocator(__DIR__.'/Fixtures/'));
         $this->spec = $loader->loadSpec('spec1');
         $this->reader = new FileReader(
-            $this->file = new File($this->getFaker()->word, $this->spec->getWidth()),
+            $this->file = new InMemoryFile($this->getFaker()->word, $this->spec->getWidth()),
             $this->spec,
             $this->formatter = \Mockery::mock('Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface'),
             $this->recognizer = \Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface')
