@@ -1,4 +1,4 @@
-Fixed Width
+Fixed Width [![Build Status](https://travis-ci.org/giftcards/FixedWidth.svg?branch=master)](https://travis-ci.org/giftcards/FixedWidth)
 ===========
 
 Purpose

@@ -89,7 +89,7 @@ class ArraySpecLoaderTest extends TestCase
                 'record2' => new RecordSpec('record2', array('field3' => $field3Spec))
             ),
             78,
-            "\n"
+            "\r\n"
         );
 
         $this->assertEquals($spec, $this->loader->loadSpec('spec1'));
