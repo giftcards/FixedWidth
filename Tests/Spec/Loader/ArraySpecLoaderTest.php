@@ -55,7 +55,8 @@ class ArraySpecLoaderTest extends TestCase
                             'slice' => '34:56',
                         ),
                     ),
-                )
+                ),
+                'line_separator' => "\n",
             ),
             'bad_field_type_spec1' => array(
                 'width' => 78,
@@ -83,13 +84,13 @@ class ArraySpecLoaderTest extends TestCase
             'spec1',
             array(
                 'record1' => new RecordSpec('record1', array(
-                        'field1' => $field1Spec,
-                        'field2' => $field2Spec
-                    )),
+                    'field1' => $field1Spec,
+                    'field2' => $field2Spec
+                )),
                 'record2' => new RecordSpec('record2', array('field3' => $field3Spec))
             ),
             78,
-            "\r\n"
+            "\n"
         );
 
         $this->assertEquals($spec, $this->loader->loadSpec('spec1'));
