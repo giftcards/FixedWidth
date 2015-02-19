@@ -41,14 +41,14 @@ class FileSystemLine extends AbstractLine
     protected function loadSlice(Slice $slice)
     {
         $this->checkSlice($slice);
-        $this->fileObject->fseek($this->startPosition + $slice->getStart());
+        $this->seekToStart($slice);
         return $this->readFromFile($slice->getWidth());
     }
 
     protected function setSlice(Slice $slice, $value)
     {
         $this->checkSlice($slice);
-        $this->fileObject->fseek($this->startPosition + $slice->getStart());
+        $this->seekToStart($slice);
         $value = str_pad(substr($value, 0, $slice->getWidth()), $slice->getWidth(), ' ', STR_PAD_RIGHT);
         $this->fileObject->fwrite($value);
         return $this;
@@ -71,5 +71,18 @@ class FileSystemLine extends AbstractLine
         }
 
         return $data;
+    }
+
+    protected function seekToStart(Slice $slice)
+    {
+        $position = $this->fileObject->ftell();
+        $seekTo = ($this->startPosition + $slice->getStart()) - $position;
+        
+        if ($seekTo == 0) {
+            
+            return;
+        }
+        
+        $this->fileObject->fseek($seekTo, SEEK_CUR);
     }
 }
