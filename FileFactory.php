@@ -29,7 +29,7 @@ class FileFactory
     {
         $lines = explode($lineSeparator, $data);
 
-        if (!($width = strlen($lines[0]))) {
+        if (!($width = strlen(reset($lines)))) {
 
             throw new \InvalidArgumentException(
                 'The data you\'ve passed is empty and therefore the width cannot be inferred.'
