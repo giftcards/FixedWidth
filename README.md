@@ -1,4 +1,4 @@
-Fixed Width [![Build Status](https://travis-ci.org/giftcards/FixedWidth.svg?branch=master)](https://travis-ci.org/giftcards/FixedWidth)
+Fixed Width [![Build Status](https://travis-ci.org/giftcards/Encryption.svg?branch=master)](https://travis-ci.org/giftcards/Encryption)
 ===========
 
 Purpose
