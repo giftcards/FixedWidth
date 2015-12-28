@@ -162,4 +162,3 @@ class FileSystemFileTest extends TestCase
         unlink(__DIR__.'/Fixtures/'.$this->name);
     }
 }
- 

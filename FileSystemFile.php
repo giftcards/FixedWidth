@@ -13,7 +13,6 @@ class FileSystemFile extends AbstractFile
     protected $fileObject;
     protected $lineSeparatorLength;
     protected $realLineWidth;
-    protected $fileData;
     protected $lineSeparator;
     protected $width;
 
@@ -108,7 +107,11 @@ class FileSystemFile extends AbstractFile
     public function addLine($line)
     {
         $line = $this->validateLine($line);
-        $this->fileObject->fseek(0, SEEK_END);
+
+        if ($this->getSize() != $this->fileObject->ftell()) {
+
+            $this->fileObject->fseek(0, SEEK_END);
+        }
         
         if (!$this->hasTrailingLineSeparator) {
             
@@ -198,12 +201,10 @@ class FileSystemFile extends AbstractFile
 
     protected function validateLine($line)
     {
-        if (!$line instanceof LineInterface) {
+        $line = (string)$line;
+        $length = strlen($line);
 
-            $line = new Line((string)$line);
-        }
-
-        if ($line->getLength() != $this->width) {
+        if ($length != $this->width) {
 
             throw new \InvalidArgumentException(sprintf(
                 'All lines in a batch file must be %d chars wide this line is %d chars wide.',
