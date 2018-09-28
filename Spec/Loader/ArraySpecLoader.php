@@ -53,11 +53,9 @@ class ArraySpecLoader implements SpecLoaderInterface
                 'record_types' => array(),
                 'line_separator' => "\r\n"
             ))
-            ->setAllowedTypes(array(
-                'field_types' => 'array',
-                'record_types' => 'array',
-                'line_separator' => 'string'
-            ))
+            ->setAllowedTypes('field_types', 'array')
+            ->setAllowedTypes('record_types', 'array')
+            ->setAllowedTypes('line_separator', 'string')
         ;
         $fieldTypeOptionsResolver = new OptionsResolver();
         $fieldTypeOptionsResolver
@@ -66,16 +64,15 @@ class ArraySpecLoader implements SpecLoaderInterface
                 'padding_char' => '',
                 'format_specifier' => 's',
             ))
-            ->setAllowedTypes(array(
-                'padding_char' => 'scalar',
-                'format_specifier' => 'string'
-            ))
-            ->setAllowedValues(array(
-                'padding_direction' => array(
+            ->setAllowedTypes('padding_char', 'scalar')
+            ->setAllowedTypes('format_specifier', 'string')
+            ->setAllowedValues(
+                'padding_direction',
+                array(
                     FieldSpec::PADDING_DIRECTION_LEFT,
                     FieldSpec::PADDING_DIRECTION_RIGHT
                 )
-            ))
+            )
         ;
 
 
@@ -90,7 +87,7 @@ class ArraySpecLoader implements SpecLoaderInterface
         $fieldOptionsResolver
             ->setRequired(array('type', 'slice'))
             ->setDefaults(array('default' => null))
-            ->setAllowedValues(array('type' => array_keys($spec['field_types'])))
+            ->setAllowedValues('type', array_keys($spec['field_types']))
         ;
 
         $lineSpecs = array();
