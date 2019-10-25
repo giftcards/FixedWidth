@@ -1,12 +1,10 @@
 language: php
 php:
-  - 5.5
-  - 5.4
-  - 5.3
-  - 7
+  - 7.1
+  - 7.3
   - hhvm
-  
-before_script: 
+
+before_script:
   - composer install --dev
 
 matrix:
