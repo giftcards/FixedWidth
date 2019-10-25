@@ -8,15 +8,15 @@
         }
     },
     "require": {
-        "php": ">=5.3"
+        "php": ">=7.0"
     },
     "require-dev": {
-        "mockery/mockery": ">=0.8@dev",
+        "mockery/mockery": "~1.2",
         "fzaninotto/faker" : "~1.2",
-        "symfony/yaml": "~2.0",
-        "symfony/config": "~2.0",
-        "symfony/options-resolver": "~2.0",
-        "symfony/stopwatch": "*"
+        "symfony/yaml": "~4.3",
+        "symfony/config": "~4.3",
+        "symfony/options-resolver": "~4.3",
+        "symfony/stopwatch": "~4.3"
     },
     "target-dir": "src/Giftcards/FixedWidth",
     "keywords": ["fixed width", "batch file","fixed width file","fixed width spec", "fixed width file spec", "batch file spec"],
