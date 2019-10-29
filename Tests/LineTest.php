@@ -15,6 +15,11 @@ use Giftcards\FixedWidth\Slice;
 class LineTest extends TestCase
 {
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testGettersSetters()
     {
         $line = new Line(10);
@@ -53,4 +58,3 @@ class LineTest extends TestCase
         $this->assertEquals('we        ', (string)$line);
     }
 }
- 

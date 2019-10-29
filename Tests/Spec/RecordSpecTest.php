@@ -14,6 +14,12 @@ use Giftcards\FixedWidth\Tests\TestCase;
 
 class RecordSpecTest extends TestCase
 {
+
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testGetters()
     {
         $name = $this->getFaker()->word;
@@ -40,4 +46,3 @@ class RecordSpecTest extends TestCase
 
     }
 }
- 

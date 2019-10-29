@@ -43,6 +43,11 @@ class FileReaderTest extends TestCase
         );
     }
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testGetFile()
     {
         $this->assertSame($this->file, $this->reader->getFile());
@@ -173,4 +178,3 @@ class FileReaderTest extends TestCase
         unset($this->reader[1]);
     }
 }
- 

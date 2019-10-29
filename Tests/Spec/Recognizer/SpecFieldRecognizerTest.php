@@ -25,6 +25,11 @@ class SpecFieldRecognizerTest extends TestCase
         $this->recognizer = new SpecFieldRecognizer('field1');
     }
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testSuccessfulRecognize()
     {
         $loader = new YamlSpecLoader(new FileLocator(__DIR__.'/../../Fixtures/'));
@@ -52,4 +57,3 @@ class SpecFieldRecognizerTest extends TestCase
         $this->assertEquals('record2', $this->recognizer->recognize($line, $spec));
     }
 }
- 

@@ -39,6 +39,11 @@ class LineToReaderIteratorTest extends TestCase
 
     }
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testIteration()
     {
         $this->file[] = new Line($this->spec->getWidth());
@@ -72,4 +77,3 @@ class LineToReaderIteratorTest extends TestCase
         );
     }
 }
- 

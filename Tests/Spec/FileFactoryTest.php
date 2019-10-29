@@ -32,6 +32,11 @@ class FileFactoryTest extends BaseFileFactoryTest
         );
     }
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testRecordSpecRecognizerManagement()
     {
         $recognizer = \Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface');
@@ -76,7 +81,7 @@ class FileFactoryTest extends BaseFileFactoryTest
         );
         $this->assertEquals(new FileReader($file, $spec, new SprintfValueFormatter(), $recognizer), $this->factory->createReader($file, $specName));
     }
-    
+
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -188,4 +193,3 @@ class FileFactoryTest extends BaseFileFactoryTest
         );
     }
 }
- 

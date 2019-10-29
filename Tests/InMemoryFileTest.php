@@ -37,6 +37,11 @@ class InMemoryFileTest extends TestCase
         );
     }
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testGettersSetters()
     {
         $this->assertEquals($this->width, $this->file->getWidth());
@@ -125,4 +130,3 @@ class InMemoryFileTest extends TestCase
         $this->file->getLine(5);
     }
 }
- 

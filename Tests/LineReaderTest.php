@@ -38,6 +38,11 @@ class LineReaderTest extends TestCase
         );
     }
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testGetField()
     {
         $this->line['40:42'] = 'ho';
@@ -105,4 +110,3 @@ class LineReaderTest extends TestCase
         unset($this->reader['field2']);
     }
 }
- 

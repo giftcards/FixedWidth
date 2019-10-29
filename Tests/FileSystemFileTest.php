@@ -160,5 +160,6 @@ class FileSystemFileTest extends TestCase
     public function tearDown()
     {
         unlink(__DIR__.'/Fixtures/'.$this->name);
+        \Mockery::close();
     }
 }

@@ -24,6 +24,11 @@ class FailedRecognizerTest extends TestCase
         $this->recognizer = new FailedRecognizer();
     }
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     /**
      * @expectedException \Giftcards\FixedWidth\Spec\Recognizer\CouldNotRecognizeException
      */
@@ -32,4 +37,3 @@ class FailedRecognizerTest extends TestCase
         $this->recognizer->recognize(new Line(''), new FileSpec('', array(), 1, "\r\n"));
     }
 }
- 

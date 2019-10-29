@@ -14,6 +14,11 @@ use Giftcards\FixedWidth\Slice;
 class SliceTest extends TestCase
 {
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testGettersSetters()
     {
         $start = $this->getFaker()->numberBetween(0, 20);
@@ -35,4 +40,3 @@ class SliceTest extends TestCase
         new Slice(23, 12);
     }
 }
- 
