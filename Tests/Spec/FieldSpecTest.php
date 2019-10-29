@@ -42,4 +42,3 @@ class FieldSpecTest extends TestCase
         $this->assertEquals($type, $spec->getType());
     }
 }
- 

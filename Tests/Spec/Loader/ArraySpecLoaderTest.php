@@ -75,6 +75,11 @@ class ArraySpecLoaderTest extends TestCase
         ));
     }
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testLoadWhereFound()
     {
         $field1Spec = new FieldSpec('field1', Slice::createFromString('34:39'), 23.34, '.2f', 'x', FieldSpec::PADDING_DIRECTION_LEFT, 'string');
@@ -113,4 +118,3 @@ class ArraySpecLoaderTest extends TestCase
         $this->loader->loadSpec('bad_field_type_spec1');
     }
 }
- 

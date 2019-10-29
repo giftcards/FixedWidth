@@ -24,6 +24,11 @@ class SprintfValueFormatterTest extends TestCase
         $this->formatter = new SprintfValueFormatter();
     }
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testFormatToFile()
     {
         $spec = new FieldSpec(
@@ -90,4 +95,3 @@ class SprintfValueFormatterTest extends TestCase
         $this->assertSame('2.3', $this->formatter->formatFromFile($spec, '2.3 '));
     }
 }
- 

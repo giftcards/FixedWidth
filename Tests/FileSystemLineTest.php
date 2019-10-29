@@ -14,6 +14,11 @@ use Giftcards\FixedWidth\Slice;
 
 class FileSystemLineTest extends TestCase
 {
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testGettersSetters()
     {
         $fileObject = new \SplFileObject(__DIR__.'/Fixtures/lazy_line_'.$this->getFaker()->word.'.txt', 'w+');

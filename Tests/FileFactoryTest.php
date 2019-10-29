@@ -25,6 +25,11 @@ class FileFactoryTest extends TestCase
         $this->factory = new FileFactory();
     }
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testCreate()
     {
         $width = $this->getFaker()->numberBetween(5, 15);
@@ -111,4 +116,3 @@ class FileFactoryTest extends TestCase
         );
     }
 }
- 

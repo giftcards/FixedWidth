@@ -21,5 +21,9 @@ abstract class AbstractSpecFileLoaderTest extends ArraySpecLoaderTest
         $this->locator = \Mockery::mock('Symfony\Component\Config\FileLocatorInterface');
         parent::setUp();
     }
+
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
 }
- 

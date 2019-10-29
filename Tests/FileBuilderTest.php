@@ -38,6 +38,11 @@ class FileBuilderTest extends TestCase
         );
     }
 
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testAddRecord()
     {
         $this->formatter
@@ -125,4 +130,3 @@ class FileBuilderTest extends TestCase
         ;
     }
 }
- 

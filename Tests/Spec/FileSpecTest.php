@@ -15,6 +15,12 @@ use Giftcards\FixedWidth\Tests\TestCase;
 
 class FileSpecTest extends TestCase
 {
+
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
+
     public function testGetters()
     {
         $name = $this->getFaker()->word;
@@ -49,4 +55,3 @@ class FileSpecTest extends TestCase
         $this->assertSame($spec1->getWidth(), $spec2->getWidth());
     }
 }
- 

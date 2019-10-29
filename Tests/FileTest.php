@@ -32,5 +32,9 @@ class FileTest extends InMemoryFileTest
             array($this->line1, $this->line2)
         );
     }
+
+    public function tearDown()
+    {
+        \Mockery::close();
+    }
 }
- 
