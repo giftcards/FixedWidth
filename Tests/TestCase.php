@@ -11,7 +11,7 @@ namespace Giftcards\FixedWidth\Tests;
 
 use Faker\Factory;
 
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected $faker;
 
@@ -24,4 +24,4 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
         return $this->faker;
     }
-} 
+}

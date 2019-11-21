@@ -14,7 +14,7 @@ use Symfony\Component\Config\FileLocator;
 
 class YamlSpecLoaderTest extends AbstractSpecFileLoaderTest
 {
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
         $this->loader = new YamlSpecLoader(new FileLocator(__DIR__.'/../../Fixtures/'));

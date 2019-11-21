@@ -13,6 +13,7 @@ use Giftcards\FixedWidth\Line;
 use Giftcards\FixedWidth\LineReader;
 use Giftcards\FixedWidth\Spec\Loader\YamlSpecLoader;
 use Giftcards\FixedWidth\Spec\RecordSpec;
+use Mockery;
 use Mockery\MockInterface;
 use Symfony\Component\Config\FileLocator;
 
@@ -27,20 +28,20 @@ class LineReaderTest extends TestCase
     /** @var  MockInterface */
     protected $formatter;
 
-    public function setUp()
+    public function setUp() : void
     {
         $loader = new YamlSpecLoader(new FileLocator(__DIR__.'/Fixtures/'));
         $spec = $loader->loadSpec('spec1');
         $this->reader = new LineReader(
             $this->line = new Line($spec->getWidth()),
             $this->spec = $spec->getRecordSpec('record1'),
-            $this->formatter = \Mockery::mock('Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface')
+            $this->formatter = Mockery::mock('Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface')
         );
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testGetField()
@@ -94,19 +95,15 @@ class LineReaderTest extends TestCase
         $this->assertSame($this->spec, $this->reader->getSpec());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testOffsetSet()
     {
+        $this->expectException('\BadMethodCallException');
         $this->reader['field2'] = 'hello';
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testOffsetUnset()
     {
+        $this->expectException('\BadMethodCallException');
         unset($this->reader['field2']);
     }
 }

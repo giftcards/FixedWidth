@@ -13,6 +13,8 @@ use Giftcards\FixedWidth\FileIterator;
 use Giftcards\FixedWidth\FileSystemFile;
 use Giftcards\FixedWidth\FileSystemLine;
 use Giftcards\FixedWidth\Line;
+use Mockery;
+use SplFileObject;
 
 class FileSystemFileTest extends TestCase
 {
@@ -25,7 +27,7 @@ class FileSystemFileTest extends TestCase
     protected $line2;
     protected $name;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->width = $this->getFaker()->numberBetween(10, 15);
         $this->line1 = str_repeat('w', $this->width);
@@ -33,7 +35,7 @@ class FileSystemFileTest extends TestCase
         $this->name = 'lazy_file_'.$this->getFaker()->word.'.txt';
         $this->file = new FileSystemFile(
             $this->width,
-            new \SplFileObject(__DIR__.'/Fixtures/'.$this->name, 'w+')
+            new SplFileObject(__DIR__.'/Fixtures/'.$this->name, 'w+')
         );
         $this->file->addLine($this->line1)->addLine($this->line2);
     }
@@ -89,50 +91,40 @@ class FileSystemFileTest extends TestCase
         $this->assertEquals(new FileIterator($this->file), $this->file->getIterator());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testAddLineWhereLengthIsWrong()
     {
+        $this->expectException('\InvalidArgumentException');
         $this->file->addLine(new Line($this->width - 1));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetLineWhereLengthIsWrong()
     {
+        $this->expectException('\InvalidArgumentException');
         $this->file->setLine(1, new Line($this->width - 1));
     }
 
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testSetLineWhereOutOfBounds()
     {
+        $this->expectException('\OutOfBoundsException');
         $this->file->setLine(4, new Line($this->width));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testGetLineWhereOutOfBounds()
     {
+        $this->expectException('\OutOfBoundsException');
         $this->file->getLine(5);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testConstructionWithUnevenFile()
     {
-        new FileSystemFile(10, new \SplFileObject(__DIR__.'/Fixtures/fixed_width_uneven.txt'), "\n");
+        $this->expectException('\InvalidArgumentException');
+        new FileSystemFile(10, new SplFileObject(__DIR__.'/Fixtures/fixed_width_uneven.txt'), "\n");
     }
 
     public function testFileWithoutTrailingLineEnding()
     {
-        $fileObject = new \SplFileObject(__DIR__.'/Fixtures/'.$this->getFaker()->word.'.txt', 'w+');
+        $fileObject = new SplFileObject(__DIR__.'/Fixtures/'.$this->getFaker()->word.'.txt', 'w+');
         $fileObject->fwrite('line');
         $file = new FileSystemFile(4, $fileObject, "\n");
         $file->addLine('line');
@@ -141,25 +133,21 @@ class FileSystemFileTest extends TestCase
         unlink($fileObject->getRealPath());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testRemoveLine()
     {
+        $this->expectException('\BadMethodCallException');
         $this->file->removeLine(0);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testUnsetLine()
     {
+        $this->expectException('\BadMethodCallException');
         unset($this->file[0]);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         unlink(__DIR__.'/Fixtures/'.$this->name);
-        \Mockery::close();
+        Mockery::close();
     }
 }

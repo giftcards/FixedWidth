@@ -10,22 +10,22 @@ namespace Giftcards\FixedWidth\Tests\Spec;
 
 
 use Giftcards\FixedWidth\Spec\FileSpec;
-use Giftcards\FixedWidth\Spec\RecordSpec;
 use Giftcards\FixedWidth\Tests\TestCase;
+use Mockery;
 
 class FileSpecTest extends TestCase
 {
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testGetters()
     {
         $name = $this->getFaker()->word;
-        $recordSpec1 = \Mockery::mock('Giftcards\FixedWidth\Spec\RecordSpec');
-        $recordSpec2 = \Mockery::mock('Giftcards\FixedWidth\Spec\RecordSpec');
+        $recordSpec1 = Mockery::mock('Giftcards\FixedWidth\Spec\RecordSpec');
+        $recordSpec2 = Mockery::mock('Giftcards\FixedWidth\Spec\RecordSpec');
         $recordSpecs = array(
             'record1' => $recordSpec1,
             'record2' => $recordSpec2,
@@ -39,11 +39,9 @@ class FileSpecTest extends TestCase
         $this->assertEquals("\r\n", $spec->getLineSeparator());
     }
 
-    /**
-     * @expectedException \Giftcards\FixedWidth\Spec\SpecNotFoundException
-     */
     public function testGetFieldSpecWhereNotThere()
     {
+        $this->expectException('\Giftcards\FixedWidth\Spec\SpecNotFoundException');
         $spec = new FileSpec($this->getFaker()->word, array(), $this->getFaker()->numberBetween(10, 20), "\r\n");
         $spec->getRecordSpec('record1');
     }

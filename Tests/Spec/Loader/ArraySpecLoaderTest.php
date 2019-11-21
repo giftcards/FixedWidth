@@ -15,13 +15,14 @@ use Giftcards\FixedWidth\Spec\FileSpec;
 use Giftcards\FixedWidth\Spec\Loader\ArraySpecLoader;
 use Giftcards\FixedWidth\Spec\RecordSpec;
 use Giftcards\FixedWidth\Tests\TestCase;
+use Mockery;
 
 class ArraySpecLoaderTest extends TestCase
 {
     /** @var  ArraySpecLoader */
     protected $loader;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->loader = new ArraySpecLoader(array(
             'spec1' => array(
@@ -75,9 +76,9 @@ class ArraySpecLoaderTest extends TestCase
         ));
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testLoadWhereFound()
@@ -102,19 +103,15 @@ class ArraySpecLoaderTest extends TestCase
         $this->assertEquals($spec, $this->loader->loadSpec('spec1'));
     }
 
-    /**
-     * @expectedException \Giftcards\FixedWidth\Spec\SpecNotFoundException
-     */
     public function testLoadWhereSpecNotFound()
     {
+        $this->expectException('\Giftcards\FixedWidth\Spec\SpecNotFoundException');
         $this->loader->loadSpec('spec2');
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     */
     public function testLoadWhereFieldTypeIsNotDefined()
     {
+        $this->expectException('\Symfony\Component\OptionsResolver\Exception\InvalidOptionsException');
         $this->loader->loadSpec('bad_field_type_spec1');
     }
 }

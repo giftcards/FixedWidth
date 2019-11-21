@@ -11,7 +11,9 @@ namespace Giftcards\FixedWidth\Tests;
 
 use Giftcards\FixedWidth\InMemoryFile;
 use Giftcards\FixedWidth\FileFactory;
+use Mockery;
 use Mockery\MockInterface;
+use SplFileInfo;
 
 class FileFactoryTest extends TestCase
 {
@@ -20,14 +22,14 @@ class FileFactoryTest extends TestCase
     /** @var  MockInterface */
     protected $specLoader;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->factory = new FileFactory();
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testCreate()
@@ -42,7 +44,7 @@ class FileFactoryTest extends TestCase
 
     public function testCreateFromFile()
     {
-        $file = new \SplFileInfo(__DIR__.'/Fixtures/fixed_width.txt');
+        $file = new SplFileInfo(__DIR__.'/Fixtures/fixed_width.txt');
         $lines = explode("\n", file_get_contents($file->getRealPath()));
 
         $this->assertEquals(
@@ -51,17 +53,15 @@ class FileFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCreateFromFileWhereFileIsEmpty()
     {
-        $this->factory->createFromFile(new \SplFileInfo(__DIR__.'/Fixtures/empty_fixed_width.txt'));
+        $this->expectException('\InvalidArgumentException');
+        $this->factory->createFromFile(new SplFileInfo(__DIR__.'/Fixtures/empty_fixed_width.txt'));
     }
 
     public function testCreateFromFileWhereFileHasTrailingEndline()
     {
-        $file = new \SplFileInfo(__DIR__.'/Fixtures/fixed_width_trailing_newline.txt');
+        $file = new SplFileInfo(__DIR__.'/Fixtures/fixed_width_trailing_newline.txt');
         $lines = explode("\n", file_get_contents($file->getRealPath()));
 
         array_pop($lines);
@@ -74,7 +74,7 @@ class FileFactoryTest extends TestCase
 
     public function testCreateFromData()
     {
-        $file = new \SplFileInfo(__DIR__.'/Fixtures/fixed_width.txt');
+        $file = new SplFileInfo(__DIR__.'/Fixtures/fixed_width.txt');
         $lines = explode("\n", file_get_contents($file->getRealPath()));
 
         $this->assertEquals(
@@ -83,11 +83,9 @@ class FileFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCreateFromDataWhereDataIsEmpty()
     {
+        $this->expectException('\InvalidArgumentException');
         $this->factory->createFromData(
             file_get_contents(__DIR__.'/Fixtures/empty_fixed_width.txt'),
             'name'

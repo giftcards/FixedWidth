@@ -14,6 +14,7 @@ use Giftcards\FixedWidth\FileBuilder;
 use Giftcards\FixedWidth\Line;
 use Giftcards\FixedWidth\Spec\FileSpec;
 use Giftcards\FixedWidth\Spec\Loader\YamlSpecLoader;
+use Mockery;
 use Mockery\MockInterface;
 use Symfony\Component\Config\FileLocator;
 
@@ -27,20 +28,20 @@ class FileBuilderTest extends TestCase
     /** @var  MockInterface */
     protected $formatter;
 
-    public function setUp()
+    public function setUp() : void
     {
         $loader = new YamlSpecLoader(new FileLocator(__DIR__.'/Fixtures/'));
         $this->spec = $loader->loadSpec('spec1');
         $this->builder = new FileBuilder(
             $this->fileName = $this->getFaker()->word,
             $this->spec,
-            $this->formatter = \Mockery::mock('Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface')
+            $this->formatter = Mockery::mock('Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface')
         );
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testAddRecord()
@@ -117,11 +118,9 @@ class FileBuilderTest extends TestCase
         $this->assertEquals($file, $this->builder->getFile());
     }
 
-    /**
-     * @expectedException \Giftcards\FixedWidth\FieldRequiredException
-     */
     public function testAddRecordWhereRequiredFieldIsMissing()
     {
+        $this->expectException('\Giftcards\FixedWidth\FieldRequiredException');
         $this->formatter->shouldIgnoreMissing();
         $this->builder
             ->addRecord('record1', array(
