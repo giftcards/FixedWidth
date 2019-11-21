@@ -11,17 +11,19 @@ namespace Giftcards\FixedWidth\Tests;
 
 use Giftcards\FixedWidth\FileSystemLine;
 use Giftcards\FixedWidth\Slice;
+use Mockery;
+use SplFileObject;
 
 class FileSystemLineTest extends TestCase
 {
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testGettersSetters()
     {
-        $fileObject = new \SplFileObject(__DIR__.'/Fixtures/lazy_line_'.$this->getFaker()->word.'.txt', 'w+');
+        $fileObject = new SplFileObject(__DIR__.'/Fixtures/lazy_line_'.$this->getFaker()->word.'.txt', 'w+');
         $fileObject->fwrite(str_repeat(' ', 10));
         $fileObject->fwrite("\n");
         $fileObject->fwrite(str_repeat(' ', 10));
@@ -56,7 +58,7 @@ class FileSystemLineTest extends TestCase
 
     public function testSetWhereValueSetIsntAsLongAsSlice()
     {
-        $fileObject = new \SplFileObject(__DIR__.'/Fixtures/lazy_line_'.$this->getFaker()->word.'.txt', 'w+');
+        $fileObject = new SplFileObject(__DIR__.'/Fixtures/lazy_line_'.$this->getFaker()->word.'.txt', 'w+');
         $fileObject->fwrite(str_repeat(' ', 10));
         $fileObject->fwrite("\n");
         $fileObject->fwrite(str_repeat(' ', 10));
@@ -67,20 +69,18 @@ class FileSystemLineTest extends TestCase
         unlink($fileObject->getRealPath());
     }
 
-    /**
-     * @expectedException \OverflowException
-     */
     public function testFileOverflow()
     {
-        $fileObject = new \SplFileObject(__DIR__.'/Fixtures/fixed_width_uneven.txt', 'r');
+        $this->expectException('\OverflowException');
+        $fileObject = new SplFileObject(__DIR__.'/Fixtures/fixed_width_uneven.txt', 'r');
         $line = new FileSystemLine($fileObject, 11, 10);
         $line->get('0:10');
     }
 
     public function test__toStringFileOverflow()
     {
-        $fileObject = new \SplFileObject(__DIR__.'/Fixtures/fixed_width_uneven.txt', 'r');
+        $fileObject = new SplFileObject(__DIR__.'/Fixtures/fixed_width_uneven.txt', 'r');
         $line = new FileSystemLine($fileObject, 11, 10);
-        (string)$line;
+        $this->assertIsString((string)$line);
     }
 }

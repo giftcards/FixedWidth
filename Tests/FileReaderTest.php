@@ -16,6 +16,7 @@ use Giftcards\FixedWidth\LineReader;
 use Giftcards\FixedWidth\LineToReaderIterator;
 use Giftcards\FixedWidth\Spec\FileSpec;
 use Giftcards\FixedWidth\Spec\Loader\YamlSpecLoader;
+use Mockery;
 use Mockery\MockInterface;
 use Symfony\Component\Config\FileLocator;
 
@@ -31,21 +32,21 @@ class FileReaderTest extends TestCase
     /** @var  MockInterface */
     protected $recognizer;
 
-    public function setUp()
+    public function setUp() : void
     {
         $loader = new YamlSpecLoader(new FileLocator(__DIR__.'/Fixtures/'));
         $this->spec = $loader->loadSpec('spec1');
         $this->reader = new FileReader(
             $this->file = new InMemoryFile($this->getFaker()->word, $this->spec->getWidth()),
             $this->spec,
-            $this->formatter = \Mockery::mock('Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface'),
-            $this->recognizer = \Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface')
+            $this->formatter = Mockery::mock('Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface'),
+            $this->recognizer = Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface')
         );
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testGetFile()
@@ -162,19 +163,15 @@ class FileReaderTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testOffsetSet()
     {
+        $this->expectException('\BadMethodCallException');
         $this->reader[1] = new Line($this->spec->getWidth());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testOffsetUnset()
     {
+        $this->expectException('\BadMethodCallException');
         unset($this->reader[1]);
     }
 }

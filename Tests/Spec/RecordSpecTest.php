@@ -11,20 +11,21 @@ namespace Giftcards\FixedWidth\Tests\Spec;
 
 use Giftcards\FixedWidth\Spec\RecordSpec;
 use Giftcards\FixedWidth\Tests\TestCase;
+use Mockery;
 
 class RecordSpecTest extends TestCase
 {
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testGetters()
     {
         $name = $this->getFaker()->word;
-        $fieldSpec1 = \Mockery::mock('Giftcards\FixedWidth\Spec\FieldSpec');
-        $fieldSpec2 = \Mockery::mock('Giftcards\FixedWidth\Spec\FieldSpec');
+        $fieldSpec1 = Mockery::mock('Giftcards\FixedWidth\Spec\FieldSpec');
+        $fieldSpec2 = Mockery::mock('Giftcards\FixedWidth\Spec\FieldSpec');
         $fieldSpecs = array(
             'field1' => $fieldSpec1,
             'field2' => $fieldSpec2,
@@ -36,11 +37,9 @@ class RecordSpecTest extends TestCase
         $this->assertSame($fieldSpec2, $spec->getFieldSpec('field2'));
     }
 
-    /**
-     * @expectedException \Giftcards\FixedWidth\Spec\SpecNotFoundException
-     */
     public function testGetFieldSpecWhereNotThere()
     {
+        $this->expectException('\Giftcards\FixedWidth\Spec\SpecNotFoundException');
         $spec = new RecordSpec($this->getFaker()->word, array());
         $spec->getFieldSpec('field1');
 

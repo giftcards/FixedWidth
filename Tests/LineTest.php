@@ -11,13 +11,14 @@ namespace Giftcards\FixedWidth\Tests;
 
 use Giftcards\FixedWidth\Line;
 use Giftcards\FixedWidth\Slice;
+use Mockery;
 
 class LineTest extends TestCase
 {
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testGettersSetters()

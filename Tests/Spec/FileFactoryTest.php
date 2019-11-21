@@ -16,7 +16,9 @@ use Giftcards\FixedWidth\FileReader;
 use Giftcards\FixedWidth\Spec\FileSpec;
 use Giftcards\FixedWidth\Spec\ValueFormatter\SprintfValueFormatter;
 use Giftcards\FixedWidth\Tests\FileFactoryTest as BaseFileFactoryTest;
+use Mockery;
 use Mockery\MockInterface;
+use SplFileInfo;
 
 class FileFactoryTest extends BaseFileFactoryTest
 {
@@ -25,21 +27,21 @@ class FileFactoryTest extends BaseFileFactoryTest
     /** @var  MockInterface */
     protected $specLoader;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->factory = new FileFactory(
-            $this->specLoader = \Mockery::mock('Giftcards\FixedWidth\Spec\Loader\SpecLoaderInterface')
+            $this->specLoader = Mockery::mock('Giftcards\FixedWidth\Spec\Loader\SpecLoaderInterface')
         );
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testRecordSpecRecognizerManagement()
     {
-        $recognizer = \Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface');
+        $recognizer = Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface');
         $specName = $this->getFaker()->word;
         $this->assertSame($this->factory, $this->factory->addRecordSpecRecognizer(
             $specName,
@@ -74,7 +76,7 @@ class FileFactoryTest extends BaseFileFactoryTest
             ->andReturn($spec)
         ;
         $this->assertEquals(new FileReader($file, $spec, new SprintfValueFormatter()), $this->factory->createReader($file, $specName));
-        $recognizer = \Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface');
+        $recognizer = Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface');
         $this->factory->addRecordSpecRecognizer(
             $specName,
             $recognizer
@@ -82,11 +84,9 @@ class FileFactoryTest extends BaseFileFactoryTest
         $this->assertEquals(new FileReader($file, $spec, new SprintfValueFormatter(), $recognizer), $this->factory->createReader($file, $specName));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCreateFromFileAndSpecWhereFileIsEmpty()
     {
+        $this->expectException('\InvalidArgumentException');
         $specName = $this->getFaker()->word;
         $spec = new FileSpec('', array(), 0, "\n");
         $this->specLoader
@@ -96,7 +96,7 @@ class FileFactoryTest extends BaseFileFactoryTest
             ->andReturn($spec)
         ;
         $this->factory->createFromFileAndSpec(
-            new \SplFileInfo(__DIR__.'/../Fixtures/empty_fixed_width.txt'),
+            new SplFileInfo(__DIR__.'/../Fixtures/empty_fixed_width.txt'),
             $specName
         );
     }
@@ -111,7 +111,7 @@ class FileFactoryTest extends BaseFileFactoryTest
             ->with($specName)
             ->andReturn($spec)
         ;
-        $file = new \SplFileInfo(__DIR__.'/../Fixtures/fixed_width_trailing_newline.txt');
+        $file = new SplFileInfo(__DIR__.'/../Fixtures/fixed_width_trailing_newline.txt');
         $lines = explode("\n", file_get_contents($file->getRealPath()));
 
         array_pop($lines);
@@ -132,7 +132,7 @@ class FileFactoryTest extends BaseFileFactoryTest
             ->with($specName)
             ->andReturn($spec)
         ;
-        $file = new \SplFileInfo(__DIR__.'/../Fixtures/fixed_width.txt');
+        $file = new SplFileInfo(__DIR__.'/../Fixtures/fixed_width.txt');
         $lines = explode("\n", file_get_contents($file->getRealPath()));
 
         $this->assertEquals(
@@ -141,11 +141,9 @@ class FileFactoryTest extends BaseFileFactoryTest
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCreateFromDataAndSpecWhereDataIsEmpty()
     {
+        $this->expectException('\InvalidArgumentException');
         $specName = $this->getFaker()->word;
         $name = $this->getFaker()->word;
         $spec = new FileSpec('', array(), 0, "\n");

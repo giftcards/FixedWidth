@@ -15,6 +15,7 @@ use Giftcards\FixedWidth\LineReader;
 use Giftcards\FixedWidth\LineToReaderIterator;
 use Giftcards\FixedWidth\Spec\FileSpec;
 use Giftcards\FixedWidth\Spec\Loader\YamlSpecLoader;
+use Mockery;
 use Mockery\MockInterface;
 use Symfony\Component\Config\FileLocator;
 
@@ -29,19 +30,19 @@ class LineToReaderIteratorTest extends TestCase
     /** @var  MockInterface */
     protected $recognizer;
 
-    public function setUp()
+    public function setUp() : void
     {
         $loader = new YamlSpecLoader(new FileLocator(__DIR__.'/Fixtures/'));
         $this->spec = $loader->loadSpec('spec1');
-        $this->formatter = \Mockery::mock('Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface');
-        $this->recognizer = \Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface');
+        $this->formatter = Mockery::mock('Giftcards\FixedWidth\Spec\ValueFormatter\ValueFormatterInterface');
+        $this->recognizer = Mockery::mock('Giftcards\FixedWidth\Spec\Recognizer\RecordSpecRecognizerInterface');
         $this->file = new InMemoryFile($this->getFaker()->word, $this->spec->getWidth());
 
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testIteration()
@@ -53,6 +54,7 @@ class LineToReaderIteratorTest extends TestCase
             ->once()
             ->with($this->file[0], $this->spec)
             ->andReturn('record1')
+            ->getMock()
             ->shouldReceive('recognize')
             ->once()
             ->with($this->file[1], $this->spec)

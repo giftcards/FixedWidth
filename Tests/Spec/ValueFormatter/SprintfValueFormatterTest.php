@@ -13,20 +13,21 @@ use Giftcards\FixedWidth\Slice;
 use Giftcards\FixedWidth\Spec\FieldSpec;
 use Giftcards\FixedWidth\Spec\ValueFormatter\SprintfValueFormatter;
 use Giftcards\FixedWidth\Tests\TestCase;
+use Mockery;
 
 class SprintfValueFormatterTest extends TestCase
 {
     /** @var SprintfValueFormatter */
     protected $formatter;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->formatter = new SprintfValueFormatter();
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testFormatToFile()

@@ -11,6 +11,7 @@ namespace Giftcards\FixedWidth\Tests;
 
 use Giftcards\FixedWidth\File;
 use Giftcards\FixedWidth\Line;
+use Mockery;
 
 class FileTest extends InMemoryFileTest
 {
@@ -23,7 +24,7 @@ class FileTest extends InMemoryFileTest
     protected $line2;
     protected $name;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
         $this->file = new File(
@@ -33,8 +34,8 @@ class FileTest extends InMemoryFileTest
         );
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 }

@@ -13,6 +13,7 @@ use Giftcards\FixedWidth\Line;
 use Giftcards\FixedWidth\Spec\Loader\YamlSpecLoader;
 use Giftcards\FixedWidth\Spec\Recognizer\SpecFieldRecognizer;
 use Giftcards\FixedWidth\Tests\TestCase;
+use Mockery;
 use Symfony\Component\Config\FileLocator;
 
 class SpecFieldRecognizerTest extends TestCase
@@ -20,14 +21,14 @@ class SpecFieldRecognizerTest extends TestCase
     /** @var SpecFieldRecognizer  */
     protected $recognizer;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->recognizer = new SpecFieldRecognizer('field1');
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testSuccessfulRecognize()
@@ -42,11 +43,9 @@ class SpecFieldRecognizerTest extends TestCase
         $this->assertEquals('record2', $this->recognizer->recognize($line, $spec));
     }
 
-    /**
-     * @expectedException \Giftcards\FixedWidth\Spec\Recognizer\CouldNotRecognizeException
-     */
     public function testFailedRecognize()
     {
+        $this->expectException('\Giftcards\FixedWidth\Spec\Recognizer\CouldNotRecognizeException');
         $loader = new YamlSpecLoader(new FileLocator(__DIR__.'/../../Fixtures/'));
         $spec = $loader->loadSpec('field_recognizer');
         $line = new Line(60);

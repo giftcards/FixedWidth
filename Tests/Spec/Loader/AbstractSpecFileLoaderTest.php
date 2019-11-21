@@ -9,6 +9,7 @@
 namespace Giftcards\FixedWidth\Tests\Spec\Loader;
 
 
+use Mockery;
 use Mockery\MockInterface;
 
 abstract class AbstractSpecFileLoaderTest extends ArraySpecLoaderTest
@@ -16,14 +17,14 @@ abstract class AbstractSpecFileLoaderTest extends ArraySpecLoaderTest
     /** @var  MockInterface */
     protected $locator;
 
-    public function setUp()
+    public function setUp() : void
     {
-        $this->locator = \Mockery::mock('Symfony\Component\Config\FileLocatorInterface');
+        $this->locator = Mockery::mock('Symfony\Component\Config\FileLocatorInterface');
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 }

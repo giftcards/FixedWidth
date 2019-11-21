@@ -8,10 +8,10 @@
 
 namespace Giftcards\FixedWidth\Tests;
 
-
 use Giftcards\FixedWidth\InMemoryFile;
 use Giftcards\FixedWidth\FileIterator;
 use Giftcards\FixedWidth\Line;
+use Mockery;
 
 class InMemoryFileTest extends TestCase
 {
@@ -24,7 +24,7 @@ class InMemoryFileTest extends TestCase
     protected $line2;
     protected $name;
 
-    public function setUp()
+    public function setUp() : void
     {
         $this->width = $this->getFaker()->numberBetween(10, 15);
         $this->line1 = str_repeat('w', $this->width);
@@ -37,9 +37,9 @@ class InMemoryFileTest extends TestCase
         );
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testGettersSetters()
@@ -97,36 +97,28 @@ class InMemoryFileTest extends TestCase
         $this->assertEquals(new FileIterator($this->file), $this->file->getIterator());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testAddLineWhereLengthIsWrong()
     {
+        $this->expectException('\InvalidArgumentException');
         $this->file->addLine(new Line($this->width - 1));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetLineWhereLengthIsWrong()
     {
+        $this->expectException('\InvalidArgumentException');
         $this->file->setLine(1, new Line($this->width - 1));
     }
 
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testSetLineWhereOutOfBounds()
     {
+        $this->expectException('\OutOfBoundsException');
         $this->file->setLine(4, new Line($this->width));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testGetLineWhereOutOfBounds()
     {
+        $this->expectException('\OutOfBoundsException');
         $this->file->getLine(5);
     }
 }

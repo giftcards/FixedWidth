@@ -8,15 +8,15 @@
 
 namespace Giftcards\FixedWidth\Tests;
 
-
 use Giftcards\FixedWidth\Slice;
+use Mockery;
 
 class SliceTest extends TestCase
 {
 
-    public function tearDown()
+    public function tearDown() : void
     {
-        \Mockery::close();
+        Mockery::close();
     }
 
     public function testGettersSetters()
@@ -32,11 +32,9 @@ class SliceTest extends TestCase
         $this->assertEquals(new Slice(1, 2), Slice::createFromString(1));
     }
 
-    /**
-     * @expectedException \RangeException
-     */
     public function testInvalidSliceRange()
     {
+        $this->expectException('\RangeException');
         new Slice(23, 12);
     }
 }
